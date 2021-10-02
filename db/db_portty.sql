@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2021 at 04:50 AM
+-- Generation Time: Sep 29, 2021 at 09:08 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_portty`
 --
-CREATE DATABASE IF NOT EXISTS `db_portty` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `db_portty`;
 
 -- --------------------------------------------------------
 
@@ -34,14 +32,15 @@ CREATE TABLE `tbl_boards` (
   `board_name` varchar(128) NOT NULL,
   `board_desc` varchar(128) NOT NULL,
   `board_location` varchar(128) NOT NULL,
-  `server_name` varchar(128) NOT NULL,
+  `monitor_name` varchar(128) NOT NULL,
   `com_port` varchar(64) NOT NULL,
   `board_type` varchar(128) NOT NULL,
+  `pins` varchar(20) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `temp` varchar(24) NOT NULL,
-  `hum` varchar(24) NOT NULL,
+  `temp` float NOT NULL,
+  `hum` float NOT NULL,
   `refresh_sec` varchar(2) NOT NULL DEFAULT '3',
-  `monitor` tinyint(1) NOT NULL
+  `monitored` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -61,62 +60,112 @@ CREATE TABLE `tbl_dht` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_pins`
+-- Table structure for table `tbl_limits`
 --
 
-CREATE TABLE `tbl_pins` (
-  `id` int(11) NOT NULL,
-  `pin_name` varchar(128) NOT NULL,
-  `pin_desc` varchar(128) NOT NULL,
-  `pin_num` int(2) NOT NULL,
+CREATE TABLE `tbl_limits` (
+  `indx` int(11) NOT NULL,
+  `lim_num` int(2) NOT NULL,
   `board_name` varchar(128) NOT NULL,
+  `lim_low` int(2) NOT NULL,
+  `lim_hi` int(2) NOT NULL,
+  `lim_trig_low` int(2) NOT NULL,
+  `lim_trig_range` int(2) NOT NULL,
+  `lim_trig_hi` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_monitors`
+--
+
+CREATE TABLE `tbl_monitors` (
+  `id` int(11) NOT NULL,
+  `monitor_name` varchar(128) NOT NULL,
+  `monitor_type` varchar(128) NOT NULL,
+  `monitor_desc` varchar(128) NOT NULL,
+  `monitor_location` varchar(128) NOT NULL,
+  `monitor_timezone` varchar(128) NOT NULL,
+  `passcode` varchar(6) NOT NULL,
+  `exe_dir` varchar(128) NOT NULL,
+  `refresh_sec` int(2) NOT NULL DEFAULT 3,
   `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_servers`
+-- Table structure for table `tbl_pins`
 --
 
-CREATE TABLE `tbl_servers` (
+CREATE TABLE `tbl_pins` (
   `id` int(11) NOT NULL,
-  `server_name` varchar(128) NOT NULL,
-  `server_desc` varchar(128) NOT NULL,
-  `server_ip` varchar(16) NOT NULL,
-  `server_location` varchar(128) NOT NULL,
-  `server_timezone` varchar(128) NOT NULL,
-  `htdocs_dir` varchar(128) NOT NULL,
-  `conf_dir` varchar(128) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0,
-  `_default` tinyint(1) NOT NULL,
-  `refresh_sec` varchar(2) NOT NULL DEFAULT '3',
-  `web_service` tinyint(1) NOT NULL,
-  `web_page` tinyint(1) NOT NULL,
-  `exe_dir` varchar(128) NOT NULL
+  `pin_num` int(2) NOT NULL,
+  `pin_name` varchar(128) NOT NULL,
+  `pin_desc` varchar(128) NOT NULL,
+  `board_name` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_url`
+-- Table structure for table `tbl_sensord`
 --
 
-CREATE TABLE `tbl_url` (
-  `id` int(11) NOT NULL,
-  `url` varchar(512) NOT NULL,
+CREATE TABLE `tbl_sensord` (
   `board_name` varchar(128) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 0,
-  `server_ip` varchar(64) NOT NULL,
-  `response` varchar(128) NOT NULL,
-  `pins` varchar(128) NOT NULL,
-  `server_name` varchar(128) NOT NULL,
-  `conf_dir` varchar(128) NOT NULL,
-  `htdocs_dir` varchar(128) NOT NULL,
-  `server_timezone` varchar(128) NOT NULL,
-  `board_refresh_sec` varchar(2) NOT NULL,
-  `exe_dir` varchar(128) NOT NULL,
-  `server_refresh_sec` varchar(128) NOT NULL
+  `val1` float NOT NULL,
+  `val2` float NOT NULL,
+  `val3` float NOT NULL,
+  `val4` float NOT NULL,
+  `val5` float NOT NULL,
+  `val6` float NOT NULL,
+  `val7` float NOT NULL,
+  `val8` float NOT NULL,
+  `val9` float NOT NULL,
+  `val10` float NOT NULL,
+  `val11` float NOT NULL,
+  `val12` float NOT NULL,
+  `val13` float NOT NULL,
+  `val14` float NOT NULL,
+  `val15` float NOT NULL,
+  `val16` float NOT NULL,
+  `val17` float NOT NULL,
+  `val18` float NOT NULL,
+  `val19` float NOT NULL,
+  `val20` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_settings`
+--
+
+CREATE TABLE `tbl_settings` (
+  `id` int(11) NOT NULL,
+  `user_email` varchar(128) NOT NULL,
+  `user_mobile` varchar(24) NOT NULL,
+  `dashboard_ip` varchar(24) NOT NULL,
+  `filtered_pins` varchar(32) NOT NULL,
+  `filtered_dht` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_users`
+--
+
+CREATE TABLE `tbl_users` (
+  `id` int(11) NOT NULL,
+  `fname` varchar(128) NOT NULL,
+  `lname` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `pass` varchar(32) NOT NULL,
+  `mobile_number` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -137,23 +186,33 @@ ALTER TABLE `tbl_dht`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbl_limits`
+--
+ALTER TABLE `tbl_limits`
+  ADD PRIMARY KEY (`indx`);
+
+--
+-- Indexes for table `tbl_monitors`
+--
+ALTER TABLE `tbl_monitors`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_pins`
 --
 ALTER TABLE `tbl_pins`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbl_servers`
+-- Indexes for table `tbl_settings`
 --
-ALTER TABLE `tbl_servers`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `server_name` (`server_name`),
-  ADD UNIQUE KEY `server_ip` (`server_ip`);
+ALTER TABLE `tbl_settings`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbl_url`
+-- Indexes for table `tbl_users`
 --
-ALTER TABLE `tbl_url`
+ALTER TABLE `tbl_users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -173,21 +232,33 @@ ALTER TABLE `tbl_dht`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbl_limits`
+--
+ALTER TABLE `tbl_limits`
+  MODIFY `indx` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_monitors`
+--
+ALTER TABLE `tbl_monitors`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_pins`
 --
 ALTER TABLE `tbl_pins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_servers`
+-- AUTO_INCREMENT for table `tbl_settings`
 --
-ALTER TABLE `tbl_servers`
+ALTER TABLE `tbl_settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_url`
+-- AUTO_INCREMENT for table `tbl_users`
 --
-ALTER TABLE `tbl_url`
+ALTER TABLE `tbl_users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
