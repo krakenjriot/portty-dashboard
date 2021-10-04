@@ -41,6 +41,33 @@
 		$msg = "";
 	}
 	
+
+
+		 //if database is empty redirect user to create account	
+         $sql = "SELECT * FROM tbl_users ";
+         if ($result = mysqli_query($conn, $sql))
+         {
+             $test = mysqli_num_rows($result);
+             mysqli_free_result($result);
+         }
+		 
+		 if($test){
+			//do nothing 
+		 } else {
+			header("location: ?p=2&email=$email_post&msg=no account is configured");
+			exit();				 
+		 }
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	if(isset($_POST['submit'])) {
@@ -49,68 +76,63 @@
 		$email_post = $_POST['email'];
 		$pass_post = $_POST['pass'];
 		
-         $sql = "SELECT * FROM tbl_users WHERE email = '$email_post' ";
-         $result = mysqli_query($conn, $sql);         
+			if( $email_post == "" || $pass_post == "" ){
+				header("location: ?p=1&msg=login-failed-empty-data-detected");
+				exit();	
+			} 			
+			else 
+			{
+				$sql = "SELECT * FROM tbl_users WHERE email = '$email_post' ";
+				$result = mysqli_query($conn, $sql);         
 
-         if (mysqli_num_rows($result) > 0)
-         {
-             // output data of each row
-             while ($row = mysqli_fetch_assoc($result))
-             {
-                 //$email = $row['email'];
-                 $pass = $row['pass'];
-                 $fname = $row['fname'];
-                 $lname = $row['lname'];
-                 $mobile_number = $row['mobile_number'];
-             }
-        } else if (mysqli_num_rows($result) == 0) {
-			header("location: ?p=2&email=$email_post&msg=please set new account");
-			exit();	
-		} 
-		
-		 $fullname = ucfirst($fname)." ".ucfirst($lname);		
-		
-		if( $pass_post == ""){
-			header("location: ?p=1&msg=login-failed-empty-data");
-			exit();	
-		} 
-		/*else if($pass == "") {
-			header("location: ?p=8&msg=please-new-set-password");
-			exit();	
-		}*/ 
-		else if(md5($pass_post) != $pass) {
-			header("location: ?p=1&msg=login-failed-check-password");
-			exit();	
-		} 		
-		else if(md5($pass_post) == $pass) {
+				if (mysqli_num_rows($result) > 0)
+				{
+					 // output data of each row
+					 while ($row = mysqli_fetch_assoc($result))
+					 {
+						 //$email = $row['email'];
+						 $pass = $row['pass'];
+						 $fname = $row['fname'];
+						 $lname = $row['lname'];
+						 $mobile_number = $row['mobile_number'];
+					 }
 			
-			session_start(); //start the PHP_session function 			
-			$_SESSION['id'] = md5(time());	
-			$_SESSION['fullname'] = $fullname;	
-			$_SESSION['fname'] = $fname;	
-			$_SESSION['email'] = $email_post;	
-			$_SESSION['mobile_number'] = $mobile_number;	
-			
-			
-			
-		
-/* 			$s_file = "start.ts";
-			if (!file_exists($s_file))
-			{				
-				file_put_contents($s_file, strtotime('now'));
+				} else if (mysqli_num_rows($result) == 0) {
+					header("location: ?p=1&email=$email_post&msg=email not found");
+					exit();	
+				}
+				
+				if(md5($pass_post) == $pass) {
+					session_start(); //start the PHP_session function 					
+					$_SESSION['id'] = md5(time());	
+					$_SESSION['fullname'] = ucfirst($fname)." ".ucfirst($lname);
+					$_SESSION['fname'] = $fname;	
+					$_SESSION['email'] = $email_post;	
+					$_SESSION['mobile_number'] = $mobile_number;									
+					header("location: ?p=4&msg=login-success&");
+					exit();	
+				} else {
+					header("location: ?p=1&msg=user-pass-incorrect&");
+					exit();					
+				}				
 			} 
-		
-			$c_file = "current.ts";
-			if (!file_exists($c_file))
-			{				
-				file_put_contents($c_file, strtotime('now'));
-			} */
+
+
+
+
+
 
 			
-			header("location: ?p=4&msg=login-success&");
-			exit();
-		}
-	}
+		
+		
+
+
+	}		
+		
+		
+		
+
+	
 	
 	
 ?>	
@@ -200,6 +222,9 @@
                                     <div class="text-center">
                                         <a class="small" href="?p=3">Forgot Password?</a>
                                     </div>
+                                    <div class="text-center">
+                                        <a class="small" href="?p=2">Register New Account?</a>
+                                    </div>									
                                     <!--<div class="text-center">
                                         <a class="small" href="?p=2">Set an Account!</a>
                                     </div>-->

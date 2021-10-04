@@ -17,15 +17,16 @@
 		
 		
 		if($pass0 == "" || $pass1 == ""){
-			//header("location: ?p=8&msg=set-pass-failed-empty-data");
+			header("location: ?p=8&msg=set-pass-failed-empty-data");
 			exit();	
 		} else if($pass0 != $pass1) {
-			//header("location: ?p=4&msg=new-server-added-success");
+			header("location: ?p=8&msg=passwords-not-matches");
 			exit();	
-		} else if($pass0 == $pass1 && ($pass0 != "" || $pass1 != "")) {
+		//} else if($pass0 == $pass1 && ($pass0 != "" || $pass1 != "")) {
+		} else if($pass0 == $pass1) {
 			
 			
-			$email;
+			//$email;
 			
 			
 			//$config = include 'config';				
@@ -39,10 +40,10 @@
 						
 					  
 					  if ($conn->query($sql) === true) {
-						header("location: ?p=4&msg=password-update-successful");
+						header("location: ?p=7&msg=reset-password-success");
 						exit();					  
 					  } else {
-						header("location: ?p=4&msg=password-update-error");
+						header("location: ?p=8&msg=password-update-error");
 						exit();				  
 					  }	
 
