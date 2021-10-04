@@ -219,11 +219,11 @@
                                         </a>-->
                                     </form>
                                     <hr>
-                                    <div class="text-center">
+                                <!--     <div class="text-center">
                                         <a class="small" href="?p=3">Forgot Password?</a>
-                                    </div>
+                                    </div> -->
                                     <div class="text-center">
-                                        <a class="small" href="?p=2">Register New Account?</a>
+                                        <a class="small" href="?p=2">Register new account?</a>
                                     </div>									
                                     <!--<div class="text-center">
                                         <a class="small" href="?p=2">Set an Account!</a>

@@ -143,13 +143,11 @@
                                 
                                
                             </form>
-                            <!--<hr>
+                            <hr>
+
                             <div class="text-center">
-                                <a class="small" href="?p=3">Forgot Password?</a>
+                                <a class="small" href="?p=1">Already have an account?</a>
                             </div>
-                            <div class="text-center">
-                                <a class="small" href="?p=1">Already have an account? Login!</a>
-                            </div>-->
                         </div>
                     </div>
                 </div>

@@ -113,8 +113,7 @@
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="?p=4">Return Home</a>
-                                    </div>
-                                    
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
