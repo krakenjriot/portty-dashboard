@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2021 at 09:08 PM
+-- Generation Time: Oct 05, 2021 at 06:42 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -90,6 +90,8 @@ CREATE TABLE `tbl_monitors` (
   `passcode` varchar(6) NOT NULL,
   `exe_dir` varchar(128) NOT NULL,
   `refresh_sec` int(2) NOT NULL DEFAULT 3,
+  `current_ts` int(11) NOT NULL,
+  `last_ts` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
