@@ -1,120 +1,159 @@
 <?php
 
-$dht_file = "";
-$out_file = "";
-$tmp_file = "";
+	//include ("../session.php");
+	include ("../dbconnect.php");
+	include ("../functions.php");
 
-if (isset($_GET['pins']) && $_GET['board_name'])
-{
+	header("Content-Type: application/json; charset=UTF-8");
+	$myObj = new \stdClass();
+	$pins = "";
+	$board_name = "";
+	$passcode = "";
+	//$dht = "";
+	
 
-    //b=$board_name&
-    //p=$pins&
-    //exe_dir=$exe_dir&
-    //server_timezone=$server_timezone";
-    $pins = $_GET['pins'];
-    $board_name = $_GET['board_name'];
-    $server_timezone = $_GET['server_timezone'];
-    $htdocs_dir = $_GET['htdocs_dir'];
-    $exe_dir = $_GET['exe_dir'];
-    $server_refresh_sec = $_GET['server_refresh_sec'];	
-    $board_refresh_sec = $_GET['board_refresh_sec'];	
+if	(	isset($_GET['board_name']) && 
+		isset($_GET['passcode']) && 
+		isset($_GET['get'])
+	){
+		
+	//echo "11000000000000000000";
 	
 	
-	//echo $server_timezone;
-	//echo $server_refresh_sec."</br>";
 	
-	//$board_refresh_sec = (int) $board_refresh_sec;
 	
-	//$config = include $htdocs_dir . '\\config';		
-	//var_dump($config);		
-	//$config['server_refresh_sec']= $server_refresh_sec;	
-	//file_put_contents($htdocs_dir.'\\config', '<?php return ' . var_export($config, true) . ';');		
-	//file_put_contents($htdocs_dir . '\\config', '<?php return ' . var_export($config, true) . ';');	
+	$board_name = $_GET['board_name'];
+	$dht = $_GET['dht'];
+	//echo $dht;
+	//check output file exist
+	
+	//check dht file exist
 
+	///////////////////////////////////////////////
 
-    $out_file = $exe_dir . "\\conf\\" . $board_name . ".output";
-    file_put_contents($out_file, $pins);
+	
+	//$temp = "2";
+	//$hum = "1";	
+    
+	$sql = "SELECT * FROM tbl_pins WHERE board_name = '$board_name' ORDER BY pin_num ASC";
+    $result = mysqli_query($conn, $sql);
 
-    $dht_file = $exe_dir . "\\conf\\" . $board_name . ".dht";
-    if (!file_exists($dht_file))
+    if (mysqli_num_rows($result) > 0)
     {
-        file_put_contents($dht_file, "0,0");
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($result))
+        {
+            $pins .= $row['active'];
+        }
     }
 
-	$tmp_file = $exe_dir . "\\conf\\" . $board_name . ".tmp";
-    if (!file_exists($tmp_file))
-    {
-        file_put_contents($tmp_file, "");
-    }
-
-    $diff = time() - filemtime($tmp_file);
-
-	//echo "diff ".$diff."</br>";	
-	//echo "board_refresh_sec ".$board_refresh_sec."</br>";	
-
-    //echo "diff ".$diff."</br>";
-    //echo "</br>";
-    //echo "dht_file ".$dht_file."</br>";
-    //value is zero then set it to 3 secs
-    //if(!$board_refresh_sec) $board_refresh_sec = 3;   
-
-    //if ($diff < $board_refresh_sec * 3)
-    if ($diff < $board_refresh_sec * 3)
-    { // 10 seconds
-        //echo "</br>porttymon for board ($board_name) is running";
-        //return true;
-        $monitor = 1;
-    }
-    else
-    {
-        //echo "</br>porttymon for board ($board_name) is not running";
-        //return false;
-        $monitor = 0;
-    }
-
-	//$tz = "Asia/Riyadh"
-	
-    //echo "</br>";
-    //echo "</br>";
-    //echo "$config: ". var_dump($config)."</br>";
-    //echo "dht hum: ". $dht_arr[1]."</br>";
-    date_default_timezone_set($server_timezone);
-    //date_default_timezone_set("Asia/Riyadh");
-    //date_default_timezone_set($tz);
-
-	//file_put_contents($dht_csv_tmp); // write temp file
-	//copy($dht_file, $dht_file_tmp); // ideally on the same filesystem			
-	
-    //file_put_contents($dht_file_tmp,  file_get_contents($dht_file));
-	
-	$dht_csv = @file_get_contents($dht_file);
-	
-    $dt = date('Y-m-d H:i:s:q');
-
-    //echo "</br>";
-    //echo "</br>";
-    //echo "return porttysen.exe input file";
-    //if(empty($dht_csv))$dht_csv = "0,0";
 	
 	
-    if (!empty($dht_csv)) echo "$board_name,$dt,$dht_csv,0ld7vcxm72c2g3yz,$server_timezone,$monitor";
-	else echo "$board_name,$dt,0,0,0ld7vcxm72c2g3yz,$server_timezone,$monitor";
-	//dont save if zero value
 	
-	//unlink($dht_file);
+	
+	$file_output = "../exe/conf/$board_name.output";
+	if(!is_file($file_output)){
+		//$contents = 'This is a test!';
+		file_put_contents($file_output, "00000000000000000000");
+	}
+	
+	$file_dht = "../exe/conf/$board_name.dht";
+	if(!is_file($file_dht)){
+		//$contents = 'This is a test!';
+		file_put_contents($file_dht, $dht);
+	}
+	
+	$file_tmp = "../exe/conf/$board_name.tmp";
+	if(!is_file($file_tmp)){
+		//$contents = 'This is a test!';
+		file_put_contents($file_tmp, "0");
+	}	
+	
+	//$board_name = $_GET['board_name'];
+	//echo __DIR__ . " test";
+	
+	//save dht values
+	file_put_contents("../exe/conf/$board_name.dht", $dht);
+	file_put_contents("../exe/conf/$board_name.tmp", $dht);
+	file_put_contents("../exe/conf/$board_name.output", $pins);
+	
+	
+	
+	///////////////////////////////////////////////
+	//$dht_str = "1111,22333";
+	//$dht_str = file_get_contents("../exe/conf/$board_name.dht");
+	//$dht_arr = str_getcsv($dht_str);
+	$dht_arr = str_getcsv($dht);
+	//file_put_contents("../exe/conf/$board_name.dht_arr", $dht_arr[0]);
+	$temp = $dht_arr[0];
+	$hum = $dht_arr[1];	
+
+	$sql = "INSERT INTO tbl_dht (temp, hum, board_name) VALUES ($temp, $hum, '$board_name')";
+	$conn->query($sql);
+	///////////////////////////////////////////////
+	$sql = "UPDATE tbl_boards SET " . " temp = $temp, " . " hum = $hum " . " WHERE board_name = '$board_name' ";
+	$conn->query($sql);
+	/*
+	$dht_str = file_get_contents("../exe/conf/$board_name.dht");
+	$dht_arr = str_getcsv($dht_str);
+	$temp = $dht_arr[0];
+	$hum = $dht_arr[1];	
+	*/
+	
+	//file_put_contents("../exe/conf/$board_name.temp", $temp);
+	//file_put_contents("../exe/conf/$board_name.hum", $hum);
+	/*
+	$dht_arr = str_getcsv($dht_str);
+	$temp = $dht_arr[0];
+	$hum = $dht_arr[1];	
+	
+	//echo "temp " . $temp;
+	//echo "</br>";
+	//echo "hum " . $hum;
+	*/
+	/*
+	$sql = "INSERT INTO tbl_dht (temp, hum, board_name) VALUES ($temp, $hum, '$board_name')";
+	$conn->query($sql);
+	///////////////////////////////////////////////
+	$sql = "UPDATE tbl_boards SET " . " temp = $temp, " . " hum = $hum " . " WHERE board_name = '$board_name' ";
+	$conn->query($sql);
+	*/
+	
+	
+	///////////////////////////////////////////////	
+	//$dht_arr = "";
+	
+	//print_r($dht_arr);
+
+
+	//read output pins
+	//$pins = file_get_contents("../exe/conf/$board_name.output");
+	
+	$myObj->board_name = $board_name;
+	$myObj->pins = $pins;
+	
+	$myJSON = json_encode($myObj);
+
+	echo $myJSON;	
+	
+} 
+
+else if	(	isset($_GET['board_name']) && 
+			isset($_GET['passcode']) && 
+			isset($_GET['pins']) && 
+			isset($_GET['post'])
+	){
+		
+		
+	}
+
+
+
+
+else {
+	echo "porttyweb api link";
 }
 
-/*
-	$new_datetime = date("H:i:s");
-	echo " [0ld7vcxm72c2g3yz] ";
-	echo " [". $new_datetime . "] - Board Name: $b</br>";
-	echo "todo list - create auto batch file for new add board</br>";
-	echo "todo list - add com ports in add/edit board</br>";
-	echo "todo list - add cascading links server -> boards -> pins with filter table</br>";
-	echo "todo list - create board output if not present</br>";
-	echo "todo list - settings to modal to add worker refresh rate</br>";
-*/
 
-//echo "server_refresh_sec ".$server_refresh_sec."</br>";
 
 ?>
