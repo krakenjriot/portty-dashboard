@@ -24,6 +24,7 @@
     case '15': include('worker.exec.php'); break;		
     case '16': include('get_data.php'); break;		
     case '17': include('start-xloader.php'); break;		
+    case '18': include('set-pass-override.php'); break;		
 	default : include('404.php'); break;    
 	}
 	

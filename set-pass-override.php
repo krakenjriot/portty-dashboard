@@ -1,5 +1,5 @@
 <?php
-	include ("session.php");
+	//include ("session.php");
 	include ("dbconnect.php");
 	include ("functions.php");	
 
@@ -9,23 +9,49 @@
 		$msg = "<div class='small mb-3 text-muted'>Enter the new password twice and press Set New Password Button</div>";
 	}
 	
+	$email = file_get_contents("pass-reset-override.txt");
 	
+	
+	if(empty($email)){
+		header("location: ?p=1&msg=reset-file-is-empty");
+		exit();			
+	}
+	
+	//$email = test_input($_POST["email"]);
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {		
+		header("location: ?p=1&msg=invalid-email-format-in-file");
+		exit();		  
+	}
 
+
+    $sql = "SELECT * FROM tbl_users WHERE email = '$email' ";
+	$result = mysqli_query($conn, $sql);
+	$count = mysqli_num_rows($result);	
+    if ($count == 0)
+    {
+			header("location: ?p=1&msg=email-in-file-not-found");
+			exit();	
+    }
+	
 	
 	
 	if(isset($_POST['submit'])) {
+		
 		
 		$pass0 = $_POST['pass0'];
 		$pass1 = $_POST['pass1'];
 		
 		
-		if($pass0 == "" || $pass1 == ""){
-			header("location: ?p=8&msg=set-pass-failed-empty-data");
+		
+		
+		
+		if($pass0 == "" || $pass1 == "" || $email == ""){
+			header("location: ?p=18&msg=set-pass-failed-empty-data");
 			exit();	
 		} else if($pass0 != $pass1) {
-			header("location: ?p=8&msg=passwords-not-matches");
+			header("location: ?p=18&msg=passwords-not-matches");
 			exit();	
-		//} else if($pass0 == $pass1 && ($pass0 != "" || $pass1 != "")) {
+	
 		} else if($pass0 == $pass1) {
 			
 			
@@ -43,10 +69,11 @@
 						
 					  
 					  if ($conn->query($sql) === true) {
-						header("location: ?p=7&msg=reset-password-success");
+						file_put_contents("pass-reset-override.txt","");
+						header("location: ?p=1&msg=reset-password-success");
 						exit();					  
 					  } else {
-						header("location: ?p=8&msg=password-update-error");
+						header("location: ?p=18&msg=password-update-error");
 						exit();				  
 					  }	
 
@@ -99,11 +126,14 @@
                                         <h1 class="h4 text-gray-900 mb-2">Set Your Password?</h1>
                                         <p class="mb-4"><?php echo $msg; ?></p>
                                     </div>
-                                    <form class="user" action="?p=8" method="post">
+                                    <form class="user" action="?p=18" method="post">
                                         <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                id="inputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter new Email..." name="email" value="<?php echo $email; ?>"  disabled >
                                             <input type="password" class="form-control form-control-user"
                                                 id="inputPass0" aria-describedby="emailHelp"
-                                                placeholder="Enter new password..." name="pass0">
+                                                placeholder="Enter new password..." name="pass0">												
                                             <input type="password" class="form-control form-control-user"
                                                 id="inputPass1" aria-describedby="emailHelp"
                                                 placeholder="Repeat new password..." name="pass1">											
@@ -115,7 +145,7 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="?p=4">Return Home</a>
+                                        <a class="small" href="?p=4">Sign in now?</a>
                                     </div>                                    
                                 </div>
                             </div>

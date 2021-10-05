@@ -504,6 +504,7 @@
                   $user_email = $_POST['user_email'];
                   
                   
+                  
                   $sql = "SELECT * FROM tbl_settings ";
                   $result = mysqli_query($conn, $sql);	
                   $count = mysqli_num_rows($result);	
@@ -1657,7 +1658,7 @@
                                  <tr>
                                     <th>trash</th>
                                     <th>edit</th>
-                                    <th>porttymon</th>
+                                    <th>script</th>
                                     <th>board_name</th>
                                     <th>board_desc</th>
                                     <th>monitor_name</th>
@@ -1672,7 +1673,7 @@
                                  <tr>
                                     <th>trash</th>
                                     <th>edit</th>
-                                    <th>porttymon</th>
+                                    <th>script</th>
                                     <th>board_name</th>
                                     <th>board_desc</th>
                                     <th>monitor_name</th>

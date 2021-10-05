@@ -4,6 +4,21 @@
    //include ("session.php");
    include ("dbconnect.php");
    include ("functions.php");
+   
+   
+   
+	if(!file_exists("pass-reset-override.txt")){
+		file_put_contents("pass-reset-override.txt","");
+	}
+		
+	
+	
+
+		
+   
+   
+   
+   
 
 	/* if (file_exists('config')) {
 		//do nothing
@@ -215,9 +230,9 @@
                                     <div class="text-center">
                                         <a class="small" href="?p=2">Register new account?</a>
                                     </div>									
-                                    <!--<div class="text-center">
-                                        <a class="small" href="?p=2">Set an Account!</a>
-                                    </div>-->
+                                    <div class="text-center">
+                                        <a class="small" href="?p=18">Reset password?</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
