@@ -31,8 +31,12 @@
 	$sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
 	$result = mysqli_query($conn, $sql);	
 	$count1 = mysqli_num_rows($result);	
-	if($count1 == 0) $monitor_name_found = "monitor_not_found";
-	else $monitor_name_found = "monitor_found";
+	if($count1 == 0) { 
+		$monitor_name_found = "monitor_not_found";		
+	}
+	else {		
+		$monitor_name_found = "monitor_found";		
+	}
 	
 	$sql = "SELECT * FROM tbl_monitors WHERE passcode = '$passcode' ";
 	$result = mysqli_query($conn, $sql);	
@@ -49,7 +53,9 @@
         $sqlx = "UPDATE tbl_monitors SET " . 		 
 		" monitor_type = '$monitor_type' " . 
 		" WHERE monitor_name = '$monitor_name' ";
-        if ($conn->query($sqlx) === true){}			
+        if ($conn->query($sqlx) === true){
+			
+		}			
 	
 		
 		echo '[{"error":"0","err_desc":"auth-success"}]';	

@@ -83,8 +83,60 @@
 		
 		echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor"}]';
 		
-	}		
+	}
+
+
+
+
+
+		$refresh_sec = 0;
+		$curr_ts_from_db = 0;
+		$current_ts = 0;
+		//insert here 
+		//get current time stamp from db and add to last stamp
+		//get current time stamp from function and add to current stamp
+
+         $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
+         $result = mysqli_query($conn, $sql);         
+         $curr_ts_from_db = "";
+         if (mysqli_num_rows($result) > 0)
+         {
+             // output data of each row
+             while ($row = mysqli_fetch_assoc($result))
+             {
+                 $curr_ts_from_db = $row['current_ts'];
+                 $refresh_sec = $row['refresh_sec'];
+             }
+         }
+		 
+        $sql = "UPDATE tbl_monitors SET " . 		 
+		" last_ts = $curr_ts_from_db " . 
+		" WHERE monitor_name = '$monitor_name' ";
+        if ($conn->query($sql) === true);
 		
+
+		$current_ts = time();	
+		 
+        $sql = "UPDATE tbl_monitors SET " . 		 
+		" current_ts = $current_ts " . 
+		" WHERE monitor_name = '$monitor_name' ";
+        if ($conn->query($sql) === true);
+
+		//$alive = file_put_contents("xxx.txt", $current_ts - $curr_ts_from_db);
+		
+		if(($current_ts - $curr_ts_from_db) > $refresh_sec){
+			$sql = "UPDATE tbl_monitors SET " . 		 
+			" active = 0 " . 
+			" WHERE monitor_name = '$monitor_name' ";
+			
+		} else {
+			$sql = "UPDATE tbl_monitors SET " . 		 
+			" active = 1 " . 
+			" WHERE monitor_name = '$monitor_name' ";
+			
+		}
+			if ($conn->query($sql) === true);
+	
 		
     //close the db connection
     mysqli_close($conn);
