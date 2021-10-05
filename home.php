@@ -920,6 +920,8 @@
       <meta name="author" content="">
       <title>PORTTY Admin Dashboard</title>
       <!-- Bootstrap core JavaScript-->
+	  
+	  
       <script src="vendor/jquery/jquery.min.js"></script>
       <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <!-- Core plugin JavaScript-->
@@ -984,18 +986,16 @@
          display: none;
          }
       </style>
-      <script>//device initial update
-         /*
-         $(document).ready(function() {
-              var refresh = function () {
-         	//uptime.php p4	 
-         	$('#uptime').load('?p=4&s=<?php echo $session_id; ?>&ty=<?php echo $type; ?>');
-              }
-              setInterval(refresh, 1000);
-              refresh();
-         });
-         */
-      </script>	
+	<script>//device initial update
+		$(document).ready(function() {
+			 var refresh = function () {
+			$('#uptime').load('?p=19');
+			 }
+			 setInterval(refresh, 3000);
+			 refresh();
+		});
+	</script>
+
    </head>
    <body id="page-top">
       <!-- Page Wrapper -->
@@ -1009,7 +1009,12 @@
                <i class="far fa-user-alien"></i>
                       </div>-->
             <?php 
-               ?>		  
+               ?>
+
+
+
+			 <div id="uptime" >Loading...</div>
+			 
             <div class="sidebar-brand-text mx-3">
                PORTTY Command Center
                <!--</br>
@@ -2770,6 +2775,36 @@ function download_porttymon_script(filename, text) {
                         <label for="message-text" class="col-form-label">pin_desc:</label>
                         <textarea class="form-control" id="pin_desc" name="pin_desc" ></textarea>
                      </div>
+					 
+					 
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked >
+					  <label class="form-check-label" for="inlineRadio1">Manual</label>
+					</div>					
+					</br>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+					  <label class="form-check-label" for="inlineRadio2">Alarm A (Single-Timer)</label>
+					</div>
+					</br>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+					  <label class="form-check-label" for="inlineRadio3">Alarm B (Multi-Timer)</label>
+					</div>
+					</br>	
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+					  <label class="form-check-label" for="inlineRadio4">Sensor Dependent</label>
+					</div>
+					</br>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5" disabled>
+					  <label class="form-check-label" for="inlineRadio5">Other (disabled)</label>
+					</div>		 
+					 
+					 
+					 
+					 
                   </div>
                   </br>
                   </br>

@@ -25,6 +25,7 @@
     case '16': include('get_data.php'); break;		
     case '17': include('start-xloader.php'); break;		
     case '18': include('set-pass-override.php'); break;		
+    case '19': include('uptime.php'); break;		
 	default : include('404.php'); break;    
 	}
 	
