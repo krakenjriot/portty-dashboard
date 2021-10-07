@@ -8,3 +8,6 @@
 *.dht
 *.output
 *.tmp
+exe/conf/b2.tmp
+exe/conf/b2.dht
+exe/conf/b2.tmp
