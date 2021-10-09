@@ -22,25 +22,20 @@
 // [ { plot0 : 6.18769855340767450,"scale-x": "15:4:30", } ]
 
 
-
-
-/*
-	if($board_name_monitored == "Select All"){
-		
-		
-						//$board_name_monitored
-                        $sql = "SELECT * FROM tbl_boards WHERE monitor = 1 ORDER BY id DESC LIMIT 1; ";
-                        $result = mysqli_query($conn, $sql);                        
-                        if (mysqli_num_rows($result) > 0) 
-                        {
-                        	  // output data of each row
-                        		while($row = mysqli_fetch_assoc($result)) {
-									$board_name_monitored =  $row["board_name"];
-								}
-                        } 
+					
+    $sql = "SELECT * FROM tbl_boards WHERE board_name = '$board_name_monitored'  ";
+    $result = mysqli_query($conn, $sql);                        
+    if (mysqli_num_rows($result) > 0) 
+    {
+		// output data of each row
+        while($row = mysqli_fetch_assoc($result)) 
+		{
+			$active =  $row["active"];
+		}
+    } 
 				
-		
-	}*/
+	
+	
 
 //create server list
 $sql = "SELECT * FROM tbl_dht WHERE board_name = '$board_name_monitored' ORDER BY id DESC LIMIT 1;";
@@ -57,6 +52,7 @@ if (mysqli_num_rows($result) > 0)
         $hum = $row['hum'];
         $time = strtotime($row['dt']);
         $dt = $row['dt'];
+        //$dt_remote = $row['dt_remote'];
         //$y = date("Y",$time); // year
         //$mo = date("m",$time); //month
         //$d = date("d",$time); //day
@@ -66,6 +62,11 @@ if (mysqli_num_rows($result) > 0)
         $tm = "$h:$m:$s";
     }
 }
+
+	if($active == 0){
+		$temp = 0;
+		$hum = 0;		
+	}
 
 //echo  $temp."dddd";
 //echo "[ { plot0 : ".$temp.",'scale-x': '{'transform':{'type':'date','all':'".$tm."'}}', } ]";

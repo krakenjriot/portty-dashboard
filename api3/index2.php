@@ -25,20 +25,22 @@
 		{
 			$dht_arr_arr = explode(",", $value);
 			
-			if(count($dht_arr_arr) == 3) {
+			if(count($dht_arr_arr) == 4) {
 				$bn = $dht_arr_arr[0];
 				$temp = $dht_arr_arr[1];
 				$hum = $dht_arr_arr[2];				
+				$dt_remote = $dht_arr_arr[3];				
 			} else {
 				$bn = "sample";
 				$temp = 0;
 				$hum = 0;				
+				$dt_remote = 0;				
 			}
 			
 
 			
-			$sql = "INSERT INTO tbl_dht (board_name, temp, hum)
-			VALUES ('$bn', $temp, $hum )";
+			$sql = "INSERT INTO tbl_dht (board_name, temp, hum, dt_remote)
+			VALUES ('$bn', $temp, $hum, $dt_remote )";
 
 			if ($conn->query($sql) === TRUE) {
 			  //echo "New record created successfully";

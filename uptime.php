@@ -32,21 +32,9 @@
 						 $refresh_sec = $row['refresh_sec'];
 					 }
 				 }
-				 
-/* 				$sql = "UPDATE tbl_monitors SET " . 		 
-				" last_ts = $curr_ts_from_db " . 
-				" WHERE monitor_name = '$monitor_name' ";
-				if ($conn->query($sql) === true); */
-				
 
 				$current_ts = time();	
-				 
-/* 				$sql = "UPDATE tbl_monitors SET " . 		 
-				" current_ts = $current_ts " . 
-				" WHERE monitor_name = '$monitor_name' ";
-				if ($conn->query($sql) === true); */
-
-				//$alive = file_put_contents("xxx.txt", $current_ts - $curr_ts_from_db);
+				$alive = file_put_contents("xxx.txt", $current_ts - $curr_ts_from_db);
 				
 				if(($current_ts - $curr_ts_from_db) > $refresh_sec*3){
 					$sql = "UPDATE tbl_monitors SET " . 		 
@@ -65,15 +53,106 @@
 				//*************************************************		
 				//*************************************************		
             }
-    }
+    }//
 	
 	
 	echo $current_ts;
 
 
 
+    $sql0 = "SELECT * FROM tbl_boards";
+    $result0 = mysqli_query($conn, $sql0);         
+    $board_name = "";
+    if (mysqli_num_rows($result0) > 0)
+	{
+			// output data of each row
+            while ($row = mysqli_fetch_assoc($result0))
+            {				
+				$board_name = $row['board_name'];
+				//*************************************************		
+				//*************************************************		
+				//*************************************************
+				 $sql1 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1 "; 
+				 $result1 = mysqli_query($conn, $sql1);         
+				 //$curr_ts_from_db = "";
+				 if (mysqli_num_rows($result1) > 0)
+				 {
+					 // output data of each row
+					 while ($row = mysqli_fetch_assoc($result1))
+					 {
+						$dt_remote1 = $row['dt_remote']; 
+					 }
+				 }
+
+				 $sql2 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1,1 ";
+				 $result2 = mysqli_query($conn, $sql2);         
+				 //$curr_ts_from_db = "";
+				 if (mysqli_num_rows($result2) > 0)
+				 {
+					 // output data of each row
+					 while ($row = mysqli_fetch_assoc($result2))
+					 {
+						$dt_remote2 = $row['dt_remote']; 
+					 }
+				 }
+				 //file_put_contents("dt_remote1.txt", $dt_remote1);
+				 //file_put_contents("dt_remote2.txt", $dt_remote2);
+				 
+				 
+				 if($dt_remote1 == $dt_remote2){					
+					$sql9 = "UPDATE tbl_boards SET " . 		 
+					" active = 0 " . 
+					" WHERE board_name = '$board_name' ";					 
+				 } else {					
+					$sql9 = "UPDATE tbl_boards SET " . 		 
+					" active = 1 " . 
+					" WHERE board_name = '$board_name' ";					 
+				 }	 
+				
+				 if ($conn->query($sql9) === true);				 
+				 
+				 
+				 
+				 
+				 
+				 
+				 
+				 
+				 
+
+				
+					
+			}
+	} 
 
 
+
+
+/*  $sql0 = "SELECT * FROM tbl_boards";
+    $result0 = mysqli_query($conn, $sql0);         
+    $board_name = "";
+    if (mysqli_num_rows($result0) > 0)
+	{
+			// output data of each row
+            while ($row = mysqli_fetch_assoc($result0))
+            {				
+				$board_name = $row['board_name'];
+				//*************************************************		
+				//*************************************************		
+				//*************************************************
+				 $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
+				 $result = mysqli_query($conn, $sql);         
+				 $curr_ts_from_db = "";
+				 if (mysqli_num_rows($result) > 0)
+				 {
+					 // output data of each row
+					 while ($row = mysqli_fetch_assoc($result))
+					 {
+						 
+					 }
+				 }				 
+			}
+	} */
 
 
 

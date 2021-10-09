@@ -11,3 +11,9 @@
 exe/conf/b2.tmp
 exe/conf/b2.dht
 exe/conf/b2.tmp
+*.bat
+count.txt
+dt_remote1.txt
+dt_remote2.txt
+text.txt
+xxx.txt

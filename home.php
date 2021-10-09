@@ -209,15 +209,17 @@
          
 
 
-         $sql = "SELECT dashboard_ip FROM tbl_settings ";
+         $sql = "SELECT * FROM tbl_settings ";
          $result = mysqli_query($conn, $sql);
          $dashboard_ip = "";
+         $dashboard_port = "";
          if (mysqli_num_rows($result) > 0)
          {
              // output data of each row
              while ($row = mysqli_fetch_assoc($result))
              {
                  $dashboard_ip = $row['dashboard_ip'];
+                 $dashboard_port = $row['dashboard_port'];
              }
          } 
 
@@ -500,6 +502,7 @@
                   {
                   
                   $dashboard_ip = $_POST['dashboard_ip'];
+                  $dashboard_port = $_POST['dashboard_port'];
                   $user_mobile = $_POST['user_mobile'];
                   $user_email = $_POST['user_email'];
                   
@@ -514,6 +517,7 @@
                   //update
                   $sql = "UPDATE tbl_settings SET " .
                   " dashboard_ip = '$dashboard_ip', " . 
+                  " dashboard_port = $dashboard_port, " . 
                   " user_mobile = '$user_mobile', " . 
                   " user_email = '$user_email' " . 		
                   "WHERE id = 1 ";	
@@ -526,10 +530,9 @@
                   }		
                   } else {
                   //insert
-                  $sql = "INSERT INTO tbl_settings (dashboard_ip, user_mobile, user_email)
-                  VALUES ('$dashboard_ip', '$user_mobile', '$user_email' )";
-                  
-                  
+                  $sql = "INSERT INTO tbl_settings (dashboard_ip, dashboard_port, user_mobile, user_email)
+                  VALUES ('$dashboard_ip', $dashboard_port, '$user_mobile', '$user_email' )";                
+  
                   if ($conn->query($sql) === true) {
                   //success
                   //file_put_contents("check.txt", 1);	
@@ -1590,7 +1593,12 @@
                                     		"<td>" . $row["monitor_name"] . "</td>" . 
                                     		"<td>" . $row["monitor_desc"] . "</td>" . 
                                     		"<td>" . $row["monitor_type"] . "</td>" . 
-											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile_monitor' class='btn " . $butt_color . " btn-circle btn-sm' data-monitor_name='" . $row["monitor_name"] . "' data-passcode='" . $row["passcode"] . "' data-dashboard_ip='" . $dashboard_ip . "' data-refresh_sec='" . $row["refresh_sec"] . "' >$mon</i></a></td>" .
+											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile_monitor' class='btn " . $butt_color . " btn-circle btn-sm 'data-monitor_name='" . $row["monitor_name"] . 
+											"' data-passcode='" . $row["passcode"] . 
+											"' data-dashboard_ip='" . $dashboard_ip . 
+											"' data-dashboard_port='" . $dashboard_port . 
+											"' data-refresh_sec='" . $row["refresh_sec"] . 
+											"' >$mon</i></a></td>" .
                                     		"<td>" . $row["monitor_location"] . "</td>" . 
 											"<td>" . $row["monitor_timezone"] . "</td>" .                                     		 
                                     		//"<td>" . $row["exe_dir"] . "</td>" . 
@@ -2138,6 +2146,7 @@ function download_porttyweb_script(filename, text) {
            var monitor_name = link.data('monitor_name') // Extract info from data-* attributes
            var passcode = link.data('passcode') // Extract info from data-* attributes
            var dashboard_ip = link.data('dashboard_ip') // Extract info from data-* attributes
+           var dashboard_port = link.data('dashboard_port') // Extract info from data-* attributes
            var refresh_sec = link.data('refresh_sec') // Extract info from data-* attributes
            var modal = $(this)        
            modal.find('.modal-body h5').text('Download porttyweb script for monitor ' + monitor_name)	        
@@ -2145,10 +2154,12 @@ function download_porttyweb_script(filename, text) {
 			document.getElementById("download_porttyweb_id").onclick = function () {
 				var fileName = monitor_name + '.porttyweb.bat';
 				//var file_path = "C:\\xampp\\htdocs\\portty-dashboard\\batchfile\\" + fileName;	
+				//porttyweb.exe <ipaddress> <httpport> <monitor-name> <passcode> <refresh> <debug>
 				download_porttyweb_script(fileName,`
 				c:
 				cd C:\\xampp\\htdocs\\portty-dashboard\\exe
-				porttyweb.exe ` + refresh_sec + ` ` + dashboard_ip + ` ` + passcode + ` ` + monitor_name + ` 0 uno
+				//porttyweb.exe ` + refresh_sec + ` ` + dashboard_ip + ` ` + passcode + ` ` + monitor_name + ` 0 uno
+				porttyweb.exe ` + dashboard_ip + ` ` + dashboard_port + ` ` + monitor_name + ` ` + passcode + ` ` + refresh_sec + ` 0				
 				pause`);					
          
 			};
@@ -2708,6 +2719,7 @@ function download_porttymon_script(filename, text) {
                 while ($row = mysqli_fetch_assoc($result))
                 {
                     $dashboard_ip = $row['dashboard_ip'];
+                    $dashboard_port = $row['dashboard_port'];
                     $user_mobile = $row['user_mobile'];
                     $user_email = $row['user_email'];             
                 }
@@ -2729,6 +2741,11 @@ function download_porttymon_script(filename, text) {
                         <label for="dashboard_ip" class="col-form-label">dashboard_ip:</label>
                         <input type="text" class="form-control" id="dashboard_ip" name="dashboard_ip" value="<?php echo $dashboard_ip; ?>" >
                      </div>
+                     <div class="form-group ">
+                        <label for="dashboard_port" class="col-form-label">dashboard_port:</label>
+                        <input type="text" class="form-control" id="dashboard_port" name="dashboard_port" value="<?php echo $dashboard_port; ?>" >
+                     </div>					 
+					 
                      <div class="form-group">
                         <label for="user_mobile" class="col-form-label">user_mobile:</label>
                         <input class="form-control" id="user_mobile" name="user_mobile" value="<?php echo $mobile_number; ?>" ></input>
