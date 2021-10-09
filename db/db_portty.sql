@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2021 at 12:37 PM
+-- Generation Time: Oct 09, 2021 at 09:20 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -54,7 +54,8 @@ CREATE TABLE `tbl_dht` (
   `board_name` varchar(128) NOT NULL,
   `temp` float NOT NULL,
   `hum` float NOT NULL,
-  `dt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `dt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `dt_remote` int(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -151,6 +152,7 @@ CREATE TABLE `tbl_settings` (
   `user_email` varchar(128) NOT NULL,
   `user_mobile` varchar(24) NOT NULL,
   `dashboard_ip` varchar(24) NOT NULL,
+  `dashboard_port` int(4) NOT NULL,
   `filtered_pins` varchar(32) NOT NULL,
   `filtered_dht` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
