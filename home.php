@@ -211,7 +211,7 @@
 
          $sql = "SELECT dashboard_ip FROM tbl_settings ";
          $result = mysqli_query($conn, $sql);
-         $board_name_list_option = "";
+         $dashboard_ip = "";
          if (mysqli_num_rows($result) > 0)
          {
              // output data of each row
