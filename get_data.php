@@ -30,11 +30,21 @@
 		// output data of each row
         while($row = mysqli_fetch_assoc($result)) 
 		{
-			$active =  $row["active"];
+			$active0 =  $row["active"];
+			$monitor_name =  $row["monitor_name"];
 		}
     } 
 				
-	
+    $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name'  ";
+    $result = mysqli_query($conn, $sql);                        
+    if (mysqli_num_rows($result) > 0) 
+    {
+		// output data of each row
+        while($row = mysqli_fetch_assoc($result)) 
+		{
+			$active1 =  $row["active"];
+		}
+    } 	
 	
 
 //create server list
@@ -63,7 +73,7 @@ if (mysqli_num_rows($result) > 0)
     }
 }
 
-	if($active == 0){
+	if(($active0 == 0) || ($active1==0)){
 		$temp = 0;
 		$hum = 0;		
 	}

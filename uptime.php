@@ -34,20 +34,27 @@
 				 }
 
 				$current_ts = time();	
-				$alive = file_put_contents("xxx.txt", $current_ts - $curr_ts_from_db);
-				
+				//$alive = file_put_contents("xxx.txt", $current_ts - $curr_ts_from_db);
+				$monitor_stat = false;
 				if(($current_ts - $curr_ts_from_db) > $refresh_sec*3){
-					$sql = "UPDATE tbl_monitors SET " . 		 
+					$sql7 = "UPDATE tbl_monitors SET " . 		 
 					" active = 0 " . 
 					" WHERE monitor_name = '$monitor_name' ";
 					
+					$sql8 = "UPDATE tbl_boards SET " . 		 
+					" active = 0 " . 
+					" WHERE monitor_name = '$monitor_name' ";	
+					$monitor_stat = false;
+					if ($conn->query($sql8) === true);
+					
 				} else {
-					$sql = "UPDATE tbl_monitors SET " . 		 
+					$sql7 = "UPDATE tbl_monitors SET " . 		 
 					" active = 1 " . 
 					" WHERE monitor_name = '$monitor_name' ";
-					
+					$monitor_stat = true;
 				}
-					if ($conn->query($sql) === true);
+					if ($conn->query($sql7) === true);
+					
 				
 				//*************************************************		
 				//*************************************************		
@@ -99,7 +106,7 @@
 				 //file_put_contents("dt_remote2.txt", $dt_remote2);
 				 
 				 
-				 if($dt_remote1 == $dt_remote2){					
+				 if(($dt_remote1 == $dt_remote2) || $monitor_stat == false){					
 					$sql9 = "UPDATE tbl_boards SET " . 		 
 					" active = 0 " . 
 					" WHERE board_name = '$board_name' ";					 
