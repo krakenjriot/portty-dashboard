@@ -898,6 +898,8 @@
                             
                         }
                         
+						file_put_contents("exe\\conf\\$board_name.tmp", "1633808260");
+						
                         //*********** UPDATE UPDATE UPDATE ************************
                         //*********** UPDATE UPDATE UPDATE ************************
                         //*********** UPDATE UPDATE UPDATE ************************

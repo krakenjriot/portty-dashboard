@@ -17,3 +17,8 @@ dt_remote1.txt
 dt_remote2.txt
 text.txt
 xxx.txt
+count.txt
+exe/conf/b2.dht
+*.dht
+*.output
+*.tmp

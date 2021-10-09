@@ -57,7 +57,16 @@
 					echo "Error: " . $sql . "<br>" . $conn->error;                  
                   }	
 
-
+                  $sql = "INSERT INTO tbl_settings (dashboard_ip, dashboard_port)
+                  VALUES ('127.0.0.1', 80)";  
+				  //success
+                  if ($conn->query($sql) === true) {
+					  //do nothing
+                  } else {
+				  //failed
+					echo "Error: " . $sql . "<br>" . $conn->error;                  
+                  }	
+				  
 			
 			header("location: ?p=1&msg=new-account-creation-success");
 			exit();
