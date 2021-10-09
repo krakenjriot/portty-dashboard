@@ -84,7 +84,7 @@
 					 }
 				 }
 
-				 $sql2 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1,1 ";
+				 $sql2 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1,2 ";
 				 $result2 = mysqli_query($conn, $sql2);         
 				 //$curr_ts_from_db = "";
 				 if (mysqli_num_rows($result2) > 0)
