@@ -1520,15 +1520,13 @@
                               <thead>
                                  <tr>
                                     <th>trash</th>
-                                    <th>edit</th>
-                                    <th>active</th>
-                                    <th>name</th>
+                                    <th>edit</th>  
+									<th>script</th>									
+                                    <th>monitor_name</th>
                                     <th>desc</th>
-                                    <th>type</th>
-                                    <th>script</th>
+                                    <th>type</th>                                    
                                     <th>location</th>
-                                    <th>timezone</th>
-                                    
+                                    <th>timezone</th>                                    
                                     <th>passcode</th>
                                     <th>refresh_sec</th>
                                  </tr>
@@ -1536,15 +1534,13 @@
                               <tfoot>
                                  <tr>
                                     <th>trash</th>
-                                    <th>edit</th>
-                                    <th>active</th>
-                                    <th>name</th>
+                                    <th>edit</th>  
+									<th>script</th>									
+                                    <th>monitor_name</th>
                                     <th>desc</th>
-                                    <th>type</th>
-                                    <th>script</th>
+                                    <th>type</th>                                    
                                     <th>location</th>
-                                    <th>timezone</th>
-                                    
+                                    <th>timezone</th>                                    
                                     <th>passcode</th>
                                     <th>refresh_sec</th>
                                  </tr>
@@ -1589,16 +1585,17 @@
                                                             data-active='" . $row["active"] . "'
                                                             ><i class='far fa-edit fa-2x'></i></i></a></td>" .
                                     
-                                            "<td>$active</td>" . 
-                                    		"<td>" . $row["monitor_name"] . "</td>" . 
-                                    		"<td>" . $row["monitor_desc"] . "</td>" . 
-                                    		"<td>" . $row["monitor_type"] . "</td>" . 
+                                            //"<td>$active</td>" . 
 											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile_monitor' class='btn " . $butt_color . " btn-circle btn-sm 'data-monitor_name='" . $row["monitor_name"] . 
 											"' data-passcode='" . $row["passcode"] . 
 											"' data-dashboard_ip='" . $dashboard_ip . 
 											"' data-dashboard_port='" . $dashboard_port . 
 											"' data-refresh_sec='" . $row["refresh_sec"] . 
-											"' >$mon</i></a></td>" .
+											"' >$mon</i></a></td>" .											
+                                    		"<td>" . $row["monitor_name"] . "</td>" . 
+                                    		"<td>" . $row["monitor_desc"] . "</td>" . 
+                                    		"<td>" . $row["monitor_type"] . "</td>" . 
+
                                     		"<td>" . $row["monitor_location"] . "</td>" . 
 											"<td>" . $row["monitor_timezone"] . "</td>" .                                     		 
                                     		//"<td>" . $row["exe_dir"] . "</td>" . 
