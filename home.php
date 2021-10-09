@@ -453,7 +453,7 @@
                   $pin_name = $_POST['pin_name'];
                   $pin_num = $_POST['pin_num'];
                   $pin_desc = $_POST['pin_desc'];
-                  $active = $_POST['active'];
+                  //$active = $_POST['active'];
                   
                   //get board name
                   $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
@@ -470,7 +470,8 @@
                   
                   $sql = "UPDATE tbl_pins SET " .
                   
-                  " pin_desc = '$pin_desc', " . " pin_name = '$pin_name', " . " active = '$active' " .
+                  //" pin_desc = '$pin_desc', " . " pin_name = '$pin_name', " . " active = '$active' " .
+                  " pin_desc = '$pin_desc', " . " pin_name = '$pin_name' " .
                   
                   "WHERE id = '$id' ";
                   
