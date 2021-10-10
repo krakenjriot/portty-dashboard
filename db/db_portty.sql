@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2021 at 09:20 PM
+-- Generation Time: Oct 10, 2021 at 06:53 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -152,7 +152,7 @@ CREATE TABLE `tbl_settings` (
   `user_email` varchar(128) NOT NULL,
   `user_mobile` varchar(24) NOT NULL,
   `dashboard_ip` varchar(24) NOT NULL,
-  `dashboard_port` int(4) NOT NULL,
+  `dashboard_port` int(4) NOT NULL DEFAULT 80,
   `filtered_pins` varchar(32) NOT NULL,
   `filtered_dht` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
