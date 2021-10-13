@@ -453,7 +453,7 @@
                   $pin_name = $_POST['pin_name'];
                   $pin_num = $_POST['pin_num'];
                   $pin_desc = $_POST['pin_desc'];
-                  //$active = $_POST['active'];
+                  $pin_mode = $_POST['pin_mode'];
                   
                   //get board name
                   $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
@@ -471,7 +471,9 @@
                   $sql = "UPDATE tbl_pins SET " .
                   
                   //" pin_desc = '$pin_desc', " . " pin_name = '$pin_name', " . " active = '$active' " .
-                  " pin_desc = '$pin_desc', " . " pin_name = '$pin_name' " .
+                  " pin_desc = '$pin_desc', " . 
+                  " pin_mode = '$pin_mode', " . 
+				  " pin_name = '$pin_name' " .
                   
                   "WHERE id = '$id' ";
                   
@@ -2795,27 +2797,27 @@ function download_porttymon_script(filename, text) {
 					 
 					 
 					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked >
+					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio1" value="0" checked >
 					  <label class="form-check-label" for="inlineRadio1">Manual</label>
 					</div>					
 					</br>
 					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-					  <label class="form-check-label" for="inlineRadio2">Alarm A (Single-Timer)</label>
+					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio2" value="1">
+					  <label class="form-check-label" for="inlineRadio2">Timer A (Single-Timer)</label>
 					</div>
 					</br>
 					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-					  <label class="form-check-label" for="inlineRadio3">Alarm B (Multi-Timer)</label>
+					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio3" value="2">
+					  <label class="form-check-label" for="inlineRadio3">Timer B (Multi-Timer)</label>
 					</div>
 					</br>	
 					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
-					  <label class="form-check-label" for="inlineRadio4">Sensor Dependent</label>
+					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio4" value="3">
+					  <label class="form-check-label" for="inlineRadio4">Sensor Triggered</label>
 					</div>
 					</br>
 					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5" disabled>
+					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio5" value="4" disabled>
 					  <label class="form-check-label" for="inlineRadio5">Other (disabled)</label>
 					</div>		 
 					 
