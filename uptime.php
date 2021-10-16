@@ -10,7 +10,8 @@
 
     $sql0 = "SELECT * FROM tbl_monitors";
     $result0 = mysqli_query($conn, $sql0);         
-    //$curr_ts_from_db = "";
+    $curr_ts_from_db = "";
+    $refresh_sec = "";
     if (mysqli_num_rows($result0) > 0)
 	{
 			// output data of each row
@@ -22,7 +23,7 @@
 				//*************************************************
 				 $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
 				 $result = mysqli_query($conn, $sql);         
-				 $curr_ts_from_db = "";
+				 
 				 if (mysqli_num_rows($result) > 0)
 				 {
 					 // output data of each row
@@ -70,6 +71,8 @@
     $sql0 = "SELECT * FROM tbl_boards";
     $result0 = mysqli_query($conn, $sql0);         
     $board_name = "";
+	$dt_remote1 = "";	
+	$dt_remote2 = "";
     if (mysqli_num_rows($result0) > 0)
 	{
 			// output data of each row
@@ -81,7 +84,7 @@
 				//*************************************************
 				 $sql1 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1 "; 
 				 $result1 = mysqli_query($conn, $sql1);         
-				 //$curr_ts_from_db = "";
+				 
 				 if (mysqli_num_rows($result1) > 0)
 				 {
 					 // output data of each row
@@ -93,7 +96,7 @@
 
 				 $sql2 = "SELECT * FROM tbl_dht WHERE board_name = '$board_name' ORDER BY id DESC LIMIT 1,2 ";
 				 $result2 = mysqli_query($conn, $sql2);         
-				 //$curr_ts_from_db = "";
+				 
 				 if (mysqli_num_rows($result2) > 0)
 				 {
 					 // output data of each row
@@ -102,9 +105,6 @@
 						$dt_remote2 = $row['dt_remote']; 
 					 }
 				 }
-				 //file_put_contents("dt_remote1.txt", $dt_remote1);
-				 //file_put_contents("dt_remote2.txt", $dt_remote2);
-				 
 				 
 				 if(($dt_remote1 == $dt_remote2) || $monitor_stat == false){					
 					$sql9 = "UPDATE tbl_boards SET " . 		 
@@ -114,21 +114,8 @@
 					$sql9 = "UPDATE tbl_boards SET " . 		 
 					" active = 1 " . 
 					" WHERE board_name = '$board_name' ";					 
-				 }	 
-				
-				 if ($conn->query($sql9) === true);				 
-				 
-				 
-				 
-				 
-				 
-				 
-				 
-				 
-				 
-
-				
-					
+				 }	 				
+				 if ($conn->query($sql9) === true);	
 			}
 	} 
 
