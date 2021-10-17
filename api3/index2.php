@@ -3,6 +3,7 @@
 	include ("../dbconnect.php");
 	include ("../functions.php");
 
+	
 
 	// if(isset($_POST['monitor_name'])){		
 		// $monitor_name = $_POST['monitor_name'];		
@@ -79,11 +80,13 @@
 			
 			echo json_encode($data);
 		} else {
-			echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor"}]';
+			//echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor"}]';
+			echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor", "pins":"", "board_name":""}]';
 		}
 	} else {
 		
-		echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor"}]';
+		//echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor"}]';
+		echo '[{"error":"1","err_desc":"no_board_found_link_to_monitor", "pins":"", "board_name":""}]';
 		
 	}
 
