@@ -238,7 +238,7 @@ C:\portty>porttymon.exe myboard1 com10 3
 
 */
 
-function create_batch_file_monitor($board_name)
+/* function create_batch_file_monitor($board_name)
 {
     include ("dbconnect.php");
 
@@ -289,7 +289,7 @@ function create_batch_file_monitor($board_name)
 	
     
 
-} //update_url
+} //update_url */
 
 
 
@@ -357,7 +357,7 @@ function secondsToTimeInterval($seconds) {
 
 
 
-function check_url_page_reachable($url)
+/* function check_url_page_reachable($url)
 {
 
     //$url = "http://myservers.nwc.com.sa";
@@ -376,7 +376,8 @@ function check_url_page_reachable($url)
         return false;
     }
 
-} //
+} // */
+
 function check_exe_dir_exist($url)
 {
 

@@ -12,6 +12,7 @@
     $result0 = mysqli_query($conn, $sql0);         
     $curr_ts_from_db = "";
     $refresh_sec = "";
+				 
     if (mysqli_num_rows($result0) > 0)
 	{
 			// output data of each row
@@ -23,7 +24,7 @@
 				//*************************************************
 				 $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
 				 $result = mysqli_query($conn, $sql);         
-				 
+
 				 if (mysqli_num_rows($result) > 0)
 				 {
 					 // output data of each row
@@ -79,6 +80,8 @@
             while ($row = mysqli_fetch_assoc($result0))
             {				
 				$board_name = $row['board_name'];
+				//$dt_remote1 = 0;
+				//$dt_remote2 = 0;
 				//*************************************************		
 				//*************************************************		
 				//*************************************************

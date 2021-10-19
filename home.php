@@ -725,11 +725,8 @@
                         }
                         
                         $sql = "DELETE FROM tbl_url WHERE board_name='$board_name'";
-                        if (mysqli_query($conn, $sql))
-                        {
-                            //
-                            
-                        }
+                        if (mysqli_query($conn, $sql)){}
+                       
                         
                         $sql = "SELECT * FROM tbl_boards WHERE  board_name ='$board_name'";
                         $result = mysqli_query($conn, $sql);
@@ -804,7 +801,7 @@
                             exit();
                         }
                         
-                        } //
+                        } //delete board
                         
                         
                         if (isset($_POST['add_monitor']))
@@ -1886,6 +1883,7 @@
                                     									data-pin_num='" . $row["pin_num"] . "' 
                                     									data-pin_name='" . $row["pin_name"] . "' 
                                     									data-pin_desc='" . $row["pin_desc"] . "' 
+                                    									data-pin_mode='" . $row["pin_mode"] . "'														
                                     									data-board_name='" . $row["board_name"] . "'														
                                     									data-active='" . $row["active"] . "'														
                                     									><i class='far fa-edit fa-2x'></i></a></td>" . 
@@ -1957,9 +1955,27 @@
          </div>
       </div>
 	  
+  
+      <!-- x123 toggleButton -->
+      <?php 
+    /*      $sql = "SELECT * FROM tbl_settings ";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0)
+            {
+                while ($row = mysqli_fetch_assoc($result))
+                {
+                    $dashboard_ip = $row['dashboard_ip'];
+                    $dashboard_port = $row['dashboard_port'];
+                    $user_mobile = $row['user_mobile'];
+                    $user_email = $row['user_email'];             
+                }
+            } */
+         ?>	  
 	  
-xxxxxx	  
-      <!-- toggleButton -->
+	  
+	  <?php 
+		//if(
+	  ?>
       <div class="modal fade" id="toggleButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
          <div class="modal-dialog" role="document">
@@ -2803,7 +2819,7 @@ function download_porttymon_script(filename, text) {
                         <textarea class="form-control" id="pin_desc" name="pin_desc" ></textarea>
                      </div>
 					 
-					 
+					<!-- 
 					<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio1" value="0" checked >
 					  <label class="form-check-label" for="inlineRadio1">Manual</label>
@@ -2827,9 +2843,34 @@ function download_porttymon_script(filename, text) {
 					<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio5" value="4" disabled>
 					  <label class="form-check-label" for="inlineRadio5">Other (disabled)</label>
-					</div>		 
+					</div>-->		 
+					 <!-- x124 -->
 					 
-					 
+      <?php 
+    /*      $sql = "SELECT * FROM tbl_settings ";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0)
+            {
+                while ($row = mysqli_fetch_assoc($result))
+                {
+                    $dashboard_ip = $row['dashboard_ip'];
+                    $dashboard_port = $row['dashboard_port'];
+                    $user_mobile = $row['user_mobile'];
+                    $user_email = $row['user_email'];             
+                }
+            } */
+         ?>
+		 
+                     <div class="form-group active">
+                        <label for="inputState">pin_mode:</label>
+                        <select id="inputState" class="form-control" name="pin_mode">
+                           <option class="default_active" selected ></option>
+                           <option value= "manual" >manual</option>
+                           <option value= "set_date_time" >set_date_time</option>
+                           <option value= "set_time" >set_time</option>                           
+                           <option value= "set_every_seconds" >set_every_seconds</option>                           
+                        </select>
+                     </div>						 
 					 
 					 
                   </div>
@@ -2851,6 +2892,7 @@ function download_porttymon_script(filename, text) {
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
            var board_name = link.data('board_name') // Extract info from data-* attributes  
+           var pin_mode = link.data('pin_mode') // Extract info from data-* attributes  
            //var active = link.data('active') // Extract info from data-* attributes  
          var modal = $(this)      
            modal.find('.modal-title').text('Edit Pin # ' + pin_num + " ( " + pin_name + " )")        
@@ -2859,8 +2901,7 @@ function download_porttymon_script(filename, text) {
            modal.find('.modal-body .pin_num input').val(pin_num)      	
            modal.find('.modal-body .idd input').val(id)      	
            modal.find('.modal-body .board_name input').val(board_name)      	
-           //modal.find('.modal-body .active .default_active').text(active)      	
-          
+           modal.find('.modal-body .active .default_active').text(pin_mode) 
          })           
       </script>
 

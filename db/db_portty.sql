@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2021 at 05:44 AM
+-- Generation Time: Oct 19, 2021 at 09:41 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -108,7 +108,7 @@ CREATE TABLE `tbl_pins` (
   `pin_num` int(2) NOT NULL,
   `pin_name` varchar(128) NOT NULL,
   `pin_desc` varchar(128) NOT NULL,
-  `pin_mode` int(1) NOT NULL,
+  `pin_mode` varchar(64) NOT NULL,
   `board_name` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
