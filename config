@@ -3,7 +3,7 @@
   'pass' => 'c4ca4238a0b923820dcc509a6f75849b',
   'fname' => 'Ben',
   'lname' => 'David',
-  'server_refresh_sec' => NULL,
+  'server_refresh_sec' => '3',
   'mobile_number' => '',
   'board_name_monitored' => 'MY_FIRST_BOARD',
   'filter_pins_by_board' => 'MY_FIRST_BOARD',

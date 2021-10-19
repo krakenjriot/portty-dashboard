@@ -102,7 +102,7 @@ function update_pins($board_name)
 
 
 
-function update_list($board_name)
+/* function update_list($board_name)
 {
 
     $server_ip = "";
@@ -111,7 +111,7 @@ function update_list($board_name)
     $board_refresh_sec = "";
     $server_timezone = "";
     $pins = "";
-    $server_name = "";
+    $monitor_name = "";
     $response = "";
     $url = "";
 
@@ -145,14 +145,14 @@ function update_list($board_name)
         // output data of each row
         while ($row = mysqli_fetch_assoc($result))
         {
-            $server_name = $row['server_name'];
+            $monitor_name = $row['monitor_name'];
             $board_refresh_sec = $row['refresh_sec'];
         }
     }
 
-    //echo "server_name ".$server_name."</br>";
+    //echo "monitor_name ".$monitor_name."</br>";
     //get server ip
-    $sql = "SELECT * FROM tbl_servers WHERE server_name = '$server_name' ";
+    $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0)
@@ -161,7 +161,7 @@ function update_list($board_name)
         while ($row = mysqli_fetch_assoc($result))
         {
             $server_ip = $row['server_ip'];
-            $server_name = $row['server_name'];
+            $monitor_name = $row['monitor_name'];
             $exe_dir = addslashes($row['exe_dir']);
             $htdocs_dir = addslashes($row['htdocs_dir']);
             $server_timezone = $row['server_timezone'];
@@ -169,12 +169,12 @@ function update_list($board_name)
             $active = $row['active'];
         }
     }
+	 */
 	
-	
-	//save to config file as well
+/* 	//save to config file as well
 	$config = include 'config';
 	$config['server_refresh_sec']= $server_refresh_sec;	
-	file_put_contents('config', '<?php return ' . var_export($config, true) . ';');		
+	file_put_contents('config', '<?php return ' . var_export($config, true) . ';');		 */
 
 
     //echo "server_ip ".$server_ip."</br>";
@@ -185,7 +185,7 @@ function update_list($board_name)
     //echo "url ".$url."</br>";
     //check if server ip is present if not insert
     //$sql = "SELECT * FROM tbl_url WHERE board_name = 'myboard1' ";
-    $sql = "SELECT * FROM tbl_url WHERE board_name = '$board_name' ";
+ /*    $sql = "SELECT * FROM tbl_url WHERE board_name = '$board_name' ";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0)
@@ -195,7 +195,7 @@ function update_list($board_name)
 		" url = '$url', " . 
 		" pins = '$pins', " . 
 		" server_ip = '$server_ip', " . 
-		" server_name = '$server_name', " . 
+		" monitor_name = '$monitor_name', " . 
 		" htdocs_dir = '$htdocs_dir', " . " exe_dir = '$exe_dir', " . 
 		" server_timezone = '$server_timezone', " . 
 		" board_refresh_sec = '$board_refresh_sec', " . 
@@ -213,19 +213,19 @@ function update_list($board_name)
     else
     {
         //not present perform insert
-        $sql = "INSERT INTO tbl_url (server_refresh_sec, active, board_name, server_ip, url, pins, server_name, htdocs_dir, exe_dir, server_timezone, board_refresh_sec)
-  		VALUES ('$server_refresh_sec', $active, '$board_name', '$server_ip', '$url', '$pins', '$server_name', '$htdocs_dir', '$exe_dir', '$server_timezone', '$board_refresh_sec')";
+        $sql = "INSERT INTO tbl_url (server_refresh_sec, active, board_name, server_ip, url, pins, monitor_name, htdocs_dir, exe_dir, server_timezone, board_refresh_sec)
+  		VALUES ('$server_refresh_sec', $active, '$board_name', '$server_ip', '$url', '$pins', '$monitor_name', '$htdocs_dir', '$exe_dir', '$server_timezone', '$board_refresh_sec')";
         $conn->query($sql);
-    }
+    } */
 
     /*
     echo  "pins :" 		.	$pins. "</br>";
-    echo  "server_name :" .	$server_name. "</br>";
+    echo  "monitor_name :" .	$monitor_name. "</br>";
     echo  "server_ip :" 	.	$server_ip. "</br>";
     echo  "exe_dir :" 	.	$exe_dir. "</br>";
     */
 
-} //update_url
+//} //update_url
 
 
 /*
@@ -245,7 +245,7 @@ function create_batch_file_monitor($board_name)
     //get server name
     $sql = "SELECT * FROM tbl_boards WHERE board_name = '$board_name' ";
     $result = mysqli_query($conn, $sql);
-    $server_name = "";
+    $monitor_name = "";
     $refresh_sec = "";
     $com_port = "";
     if (mysqli_num_rows($result) > 0)
@@ -253,14 +253,14 @@ function create_batch_file_monitor($board_name)
         // output data of each row
         while ($row = mysqli_fetch_assoc($result))
         {
-            $server_name = $row['server_name'];
+            $monitor_name = $row['monitor_name'];
             $com_port = $row['com_port'];
             $refresh_sec = $row['refresh_sec'];
         }
     }
 
     //get server ip
-    $sql = "SELECT * FROM tbl_servers WHERE server_name = '$server_name' ";
+    $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
     $result = mysqli_query($conn, $sql);
     //$server_ip = "";
     $exe_dir = "";
@@ -299,7 +299,7 @@ function create_batch_xloader()
     include ("dbconnect.php");
 
     //get server ip
-    $sql = "SELECT * FROM tbl_servers WHERE _default = 1 ";
+    $sql = "SELECT * FROM tbl_monitors WHERE _default = 1 ";
     $result = mysqli_query($conn, $sql);
     $exe_dir = "";
     if (mysqli_num_rows($result) > 0)

@@ -485,7 +485,7 @@
                   //*********** UPDATE UPDATE UPDATE ************************
                   //*********** UPDATE UPDATE UPDATE ************************
                   //update url
-                  update_list($board_name);
+                  //update_list($board_name);
                   
                   header("location: ?p=4&pin_notif=update-pin-success#mark-pin");
                   exit();
@@ -584,8 +584,8 @@
                   //*********** UPDATE UPDATE UPDATE ************************
                   //*********** UPDATE UPDATE UPDATE ************************
                   //update url
-                  update_list($board_name);
-                  create_batch_file_monitor($board_name);
+                  //update_list($board_name);
+                  //create_batch_file_monitor($board_name);
                   
                   header("location: ?p=4&board_notif=update-board-success#mark-board");
                   exit();
@@ -826,7 +826,7 @@
                         $monitor_timezone = $_POST['monitor_timezone'];
                         $refresh_sec = $_POST['refresh_sec'];
                         //$htdocs_dir = addslashes($_POST['htdocs_dir']);
-                        $exe_dir = addslashes($_POST['exe_dir']);
+                        //$exe_dir = addslashes($_POST['exe_dir']);
                         $passcode  = $_POST['passcode'];
                         $monitor_name = str_replace(" ", "_", $monitor_name);
                         
@@ -838,13 +838,13 @@
                             while ($row = mysqli_fetch_assoc($result))
                             {
                                 $board_name = $row['board_name'];
-                                update_list($board_name);                                
+                                //update_list($board_name);                                
                             }
                         }
                         
                      
-                        $sql = "INSERT INTO tbl_monitors (active, monitor_name, monitor_desc, passcode, monitor_location, monitor_timezone, exe_dir, refresh_sec)
-                        VALUES (1, '$monitor_name', '$monitor_desc', '$passcode', '$monitor_location', '$monitor_timezone', '$exe_dir', '$refresh_sec')";
+                        $sql = "INSERT INTO tbl_monitors (active, monitor_name, monitor_desc, passcode, monitor_location, monitor_timezone, refresh_sec)
+                        VALUES (1, '$monitor_name', '$monitor_desc', '$passcode', '$monitor_location', '$monitor_timezone', '$refresh_sec')";
                         
                         if ($conn->query($sql) === true)
                         {
@@ -1956,6 +1956,9 @@
             </div>
          </div>
       </div>
+	  
+	  
+xxxxxx	  
       <!-- toggleButton -->
       <div class="modal fade" id="toggleButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -2006,7 +2009,11 @@
            modal.find('.modal-body .id input').val(id);   
            modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
          })           
-      </script>		
+      </script>	
+
+
+
+	  
       <!-- Logout Modal-->
       <div class="modal fade" id="alert_msg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -2766,6 +2773,7 @@ function download_porttymon_script(filename, text) {
             </div>
          </div>
       </div>
+	  
       <!-- EDIT PIN -->
       <div class="modal fade" id="editPin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
