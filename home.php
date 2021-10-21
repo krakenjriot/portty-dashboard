@@ -1527,6 +1527,7 @@
                                     <th>monitor_name</th>
                                     <th>desc</th>
                                     <th>type</th>                                    
+                                    <th>exe_dir</th>                                    
                                     <th>location</th>
                                     <th>timezone</th>                                    
                                     <th>passcode</th>
@@ -1541,6 +1542,7 @@
                                     <th>monitor_name</th>
                                     <th>desc</th>
                                     <th>type</th>                                    
+                                    <th>exe_dir</th>                                    
                                     <th>location</th>
                                     <th>timezone</th>                                    
                                     <th>passcode</th>
@@ -1598,6 +1600,7 @@
                                     		"<td>" . $row["monitor_name"] . "</td>" . 
                                     		"<td>" . $row["monitor_desc"] . "</td>" . 
                                     		"<td>" . $row["monitor_type"] . "</td>" . 
+                                    		"<td>" . $row["exe_dir"] . "</td>" . 
 
                                     		"<td>" . $row["monitor_location"] . "</td>" . 
 											"<td>" . $row["monitor_timezone"] . "</td>" .                                     		 
