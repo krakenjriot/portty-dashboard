@@ -1589,6 +1589,7 @@
                                     
                                             //"<td>$active</td>" . 
 											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile_monitor' class='btn " . $butt_color . " btn-circle btn-sm 'data-monitor_name='" . $row["monitor_name"] . 
+											"' data-exe_dir='" . $row["exe_dir"] . 
 											"' data-passcode='" . $row["passcode"] . 
 											"' data-dashboard_ip='" . $dashboard_ip . 
 											"' data-dashboard_port='" . $dashboard_port . 
@@ -1750,12 +1751,29 @@
                                                 $mon = "<i class='fas fa-terminal fa-2x'></i>";
                                                 $butt_color = 'btn-danger';
                                             }
+											
+											
+											
+                                    $sql0 = "SELECT * FROM tbl_monitors WHERE monitor_name = '". $row["monitor_name"] ."' ";
+                                    $result0 = mysqli_query($conn, $sql0);                                    
+                                    if (mysqli_num_rows($result0) > 0)
+                                    {
+                                        // output data of each row
+                                        while ($row0 = mysqli_fetch_assoc($result0))
+                                        {
+											$exe_dir = $row0["exe_dir"];
+										}											
+									}
+											
+											
+											
                                     
                                             echo "<tr>" . 
 											
 											"<td><a href='#' data-toggle='modal' data-target='#delBoard' class='btn btn-danger btn-circle btn-sm' data-whatever='" . $row["board_name"] . "'><i class='far fa-trash-alt fa-2x'></i></a></td>" . 											
 											"<td><a href='#' data-toggle='modal' data-target='#editBoard' class='btn btn-primary btn-circle btn-sm' 
                                     									data-board_name='" . $row["board_name"] . "' 
+                                    									
                                     									data-board_desc='" . $row["board_desc"] . "' 
                                     									data-monitor_name='" . $row["monitor_name"] . "'
                                     									data-board_type='" . $row["board_type"] . "'						
@@ -1763,7 +1781,11 @@
                                     									data-com_port='" . $row["com_port"] . "'						
                                     									data-refresh_sec='" . $row["refresh_sec"] . "'						
                                     									><i class='far fa-edit fa-2x'></i></a></td>" .                                     									
-											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile' class='btn " . $butt_color . " btn-circle btn-sm' data-board_name='" . $row["board_name"] . "' data-com_port='" . $row["com_port"] . "' data-refresh_sec='" . $row["refresh_sec"] . "' >$mon</i></a></td>" .
+											"<td><a href='#' data-toggle='modal' data-target='#downloadBoardBatchfile' class='btn " . $butt_color . " btn-circle btn-sm '
+											data-board_name='" . $row["board_name"] . "'
+											data-com_port='" . $row["com_port"] . "' 
+											data-exe_dir='" . $exe_dir . "' 
+											data-refresh_sec='" . $row["refresh_sec"] . "' >$mon</i></a></td>" .
                                             //"<td><a href='batchfile/" . $row["board_name"] . ".porttymon.bat'  class='btn " . $butt_color . " btn-circle btn-sm' download>$mon</a></td>" .
                                             "<td>" . $row["board_name"] . "</td>" . 
 											"<td>" . $row["board_desc"] . "</td>" . 
@@ -1878,6 +1900,8 @@
                                                 $toggle_value = false;
                                             }
                                     
+											$pin_mode= $row["pin_mode"];
+											
                                             echo "<tr>" . "<td><a href='#' data-toggle='modal' data-target='#editPin' class='btn btn-primary btn-circle btn-sm' 
                                     									data-id='" . $row["id"] . "' 
                                     									data-pin_num='" . $row["pin_num"] . "' 
@@ -1888,7 +1912,7 @@
                                     									data-active='" . $row["active"] . "'														
                                     									><i class='far fa-edit fa-2x'></i></a></td>" . 
                                     									
-                                    									"<td><a href='#' data-toggle='modal' data-target='#toggleButton' class='btn " . $butt_status . " btn-circle btn-sm'
+                                    									"<td><a href='#' data-toggle='modal' data-target='#set_pin_$pin_mode' class='btn " . $butt_status . " btn-circle btn-sm'
                                     									data-id='" . $row["id"] . "'
                                     									data-pin_num='" . $row["pin_num"] . "'
                                     									data-pin_name='" . $row["pin_name"] . " '
@@ -1956,7 +1980,7 @@
       </div>
 	  
   
-      <!-- x123 toggleButton -->
+      <!-- x123 set_pin -->
       <?php 
     /*      $sql = "SELECT * FROM tbl_settings ";
             $result = mysqli_query($conn, $sql);
@@ -1976,7 +2000,7 @@
 	  <?php 
 		//if(
 	  ?>
-      <div class="modal fade" id="toggleButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      <div class="modal fade" id="set_pin_manual" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -2010,7 +2034,59 @@
          </div>
       </div>
       <script type="text/javascript">
-         $('#toggleButton').on('show.bs.modal', function (event) {
+         $('#set_pin_manual').on('show.bs.modal', function (event) {
+           var link = $(event.relatedTarget) // Button that triggered the modal
+           var id = link.data('id') // Extract info from data-* attributes
+           var pin_num = link.data('pin_num') // Extract info from data-* attributes
+           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
+           var active = link.data('active') // Extract info from data-* attributes
+           var modal = $(this)
+           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           //modal.find('.modal-body input').val(recipient)
+           modal.find('.modal-body .modal-message').text(pin_desc)		   
+           //modal.find('.modal-body .cl-switch input').text(active)		   
+           modal.find('.modal-body .id input').val(id);   
+           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+         })           
+      </script>	
+
+      <div class="modal fade" id="set_pin_set_date_time" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <form class="user" action="?p=4" method="post">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"></h5>
+                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                     </button>
+                  </div>
+				  set_date_time
+                  <div class="modal-body">
+                     <div class="form-group id">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="id" name="id" hidden>
+                     </div>
+                     <div class="form-group">					
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="cl-switch cl-switch-xlarge">
+                        <input type="checkbox" class="myswtich" name="mytoggle">
+                        <span class="switcher"></span>
+                        <span class="label modal-message"></span>
+                        </label>		  
+                     </div>
+                  </div>
+                  <div class="modal-footer"> 
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
+                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script type="text/javascript">
+         $('#set_pin_set_date_time').on('show.bs.modal', function (event) {
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
@@ -2028,7 +2104,109 @@
       </script>	
 
 
+      <div class="modal fade" id="set_pin_set_time" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <form class="user" action="?p=4" method="post">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"></h5>
+                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                     </button>
+                  </div>
+				  set_pin_set_time
+                  <div class="modal-body">
+                     <div class="form-group id">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="id" name="id" hidden>
+                     </div>
+                     <div class="form-group">					
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="cl-switch cl-switch-xlarge">
+                        <input type="checkbox" class="myswtich" name="mytoggle">
+                        <span class="switcher"></span>
+                        <span class="label modal-message"></span>
+                        </label>		  
+                     </div>
+                  </div>
+                  <div class="modal-footer"> 
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
+                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script type="text/javascript">
+         $('#set_pin_set_time').on('show.bs.modal', function (event) {
+           var link = $(event.relatedTarget) // Button that triggered the modal
+           var id = link.data('id') // Extract info from data-* attributes
+           var pin_num = link.data('pin_num') // Extract info from data-* attributes
+           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
+           var active = link.data('active') // Extract info from data-* attributes
+           var modal = $(this)
+           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           //modal.find('.modal-body input').val(recipient)
+           modal.find('.modal-body .modal-message').text(pin_desc)		   
+           //modal.find('.modal-body .cl-switch input').text(active)		   
+           modal.find('.modal-body .id input').val(id);   
+           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+         })           
+      </script>
 
+      <div class="modal fade" id="set_pin_set_total_seconds" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <form class="user" action="?p=4" method="post">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"></h5>
+                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                     </button>
+                  </div>
+				  set_pin_set_total_seconds
+                  <div class="modal-body">
+                     <div class="form-group id">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="id" name="id" hidden>
+                     </div>
+                     <div class="form-group">					
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="cl-switch cl-switch-xlarge">
+                        <input type="checkbox" class="myswtich" name="mytoggle">
+                        <span class="switcher"></span>
+                        <span class="label modal-message"></span>
+                        </label>		  
+                     </div>
+                  </div>
+                  <div class="modal-footer"> 
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
+                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script type="text/javascript">
+         $('#set_pin_set_total_seconds').on('show.bs.modal', function (event) {
+           var link = $(event.relatedTarget) // Button that triggered the modal
+           var id = link.data('id') // Extract info from data-* attributes
+           var pin_num = link.data('pin_num') // Extract info from data-* attributes
+           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
+           var active = link.data('active') // Extract info from data-* attributes
+           var modal = $(this)
+           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           //modal.find('.modal-body input').val(recipient)
+           modal.find('.modal-body .modal-message').text(pin_desc)		   
+           //modal.find('.modal-body .cl-switch input').text(active)		   
+           modal.find('.modal-body .id input').val(id);   
+           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+         })           
+      </script>
 	  
       <!-- Logout Modal-->
       <div class="modal fade" id="alert_msg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -2173,6 +2351,7 @@ function download_porttyweb_script(filename, text) {
            var dashboard_ip = link.data('dashboard_ip') // Extract info from data-* attributes
            var dashboard_port = link.data('dashboard_port') // Extract info from data-* attributes
            var refresh_sec = link.data('refresh_sec') // Extract info from data-* attributes
+           var exe_dir = link.data('exe_dir') // Extract info from data-* attributes
            var modal = $(this)        
            modal.find('.modal-body h5').text('Download porttyweb script for monitor ' + monitor_name)	        
 	
@@ -2182,7 +2361,8 @@ function download_porttyweb_script(filename, text) {
 				//porttyweb.exe <ipaddress> <httpport> <monitor-name> <passcode> <refresh> <debug>
 				download_porttyweb_script(fileName,`
 				c:
-				cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				//cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				cd `+ exe_dir +`
 				//porttyweb.exe ` + refresh_sec + ` ` + dashboard_ip + ` ` + passcode + ` ` + monitor_name + ` 0 uno
 				porttyweb.exe ` + dashboard_ip + ` ` + dashboard_port + ` ` + monitor_name + ` ` + passcode + ` ` + refresh_sec + ` 0				
 				pause`);					
@@ -2203,7 +2383,7 @@ function download_porttyweb_script(filename, text) {
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
-      <div class="modal fade" id="downloadBatchfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="downloadBoardBatchfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
                <form class="user" action="?p=4" method="post" >
@@ -2240,11 +2420,12 @@ function download_porttymon_script(filename, text) {
 
 	  
 	  
-         $('#downloadBatchfile').on('show.bs.modal', function (event) {
+         $('#downloadBoardBatchfile').on('show.bs.modal', function (event) {
          
            var link = $(event.relatedTarget) // Button that triggered the modal
            var board_name = link.data('board_name') // Extract info from data-* attributes
            var com_port = link.data('com_port') // Extract info from data-* attributes
+		   var exe_dir = link.data('exe_dir') // Extract info from data-* attributes
            var refresh_sec = link.data('refresh_sec') // Extract info from data-* attributes
            var modal = $(this)        
            modal.find('.modal-body h5').text('Download porttymon script for board ' + board_name)	        
@@ -2254,7 +2435,8 @@ function download_porttymon_script(filename, text) {
 				//var file_path = "C:\\xampp\\htdocs\\portty-dashboard\\batchfile\\" + fileName;	
 				download_porttymon_script(fileName,`
 				c:
-				cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				//cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				cd ` + exe_dir + `
 				porttymon.exe ` + board_name + ` ` + com_port + ` ` + refresh_sec + `
 				pause`);					
          
@@ -2868,7 +3050,7 @@ function download_porttymon_script(filename, text) {
                            <option value= "manual" >manual</option>
                            <option value= "set_date_time" >set_date_time</option>
                            <option value= "set_time" >set_time</option>                           
-                           <option value= "set_every_seconds" >set_every_seconds</option>                           
+                           <option value= "set_total_seconds" >set_total_seconds</option>                           
                         </select>
                      </div>						 
 					 
