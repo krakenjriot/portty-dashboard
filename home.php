@@ -2163,7 +2163,7 @@
                      <span aria-hidden="true">×</span>
                      </button>
                   </div>
-				  set_date_time
+				  
                   <div class="modal-body">
                      <div class="form-group id">
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
