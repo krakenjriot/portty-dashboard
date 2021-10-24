@@ -449,13 +449,37 @@
                   $id = $_POST['id'];
                   $dtp_input1 = $_POST['dtp_input1'];
                   $dtp_input2 = $_POST['dtp_input2'];
+                  
+                  
 				  
-				  file_put_contents("dt.txt",$id);
-                
-                  
-               /*    if (empty($mytoggle)) $mytoggle = 0;
-                  else $mytoggle = 1; */
-                  
+				$year1 = date("Y", strtotime($dtp_input1));
+				$day1 = date("d", strtotime($dtp_input1));
+				$month1 = date("m", strtotime($dtp_input1));
+				$hour1 = date("H", strtotime($dtp_input1));
+				$minute1 = date("i", strtotime($dtp_input1));
+				$second1 = $_POST['startsec'];
+				$starttime = ($year1 . "-" . $month1 . "-" . $day1 . " " . $hour1 . ":" . $minute1 . ":" . $second1);	
+
+				$year2 = date("Y", strtotime($dtp_input2));
+				$day2 = date("d", strtotime($dtp_input2));
+				$month2 = date("m", strtotime($dtp_input2));
+				$hour2 = date("H", strtotime($dtp_input2));
+				$minute2 = date("i", strtotime($dtp_input2));
+				$second2 = $_POST['stopsec'];				  
+				$stoptime = ($year2 . "-" . $month2 . "-" . $day2 . " " . $hour2 . ":" . $minute2 . ":" . $second2);	
+				
+				if($second1 == "x") $starttime = $dtp_input1;
+				if($second2 == "x") $stoptime = $dtp_input2;
+				
+
+				if(strtotime($starttime) > strtotime($stoptime)){
+					header("location: ?p=4&pin_notif=failed-update-reason-starttime-greater-than-stoptime&$mytoggle#mark-pin");
+					exit();					
+				}
+
+
+
+				
                   //get board name
                   $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
                   $result = mysqli_query($conn, $sql);
@@ -470,8 +494,8 @@
                   }
                   
                   $sql = "UPDATE tbl_pins SET " .                  
-                  " startdt = '$dtp_input1', " .
-                  " stopdt = '$dtp_input2' " .                  
+                  " startdt = '$starttime', " .
+                  " stopdt = '$stoptime' " .                  
                   "WHERE id = '$id' ";
                   
                   if ($conn->query($sql) === true)
@@ -2156,14 +2180,13 @@
                      </div> -->
 					 
 					<?php 
-						$mytime = date("Y-m-d H:i:s");
-						echo $mytime;
-						
+						//$mytime = date("Y-m-d H:i:s");
+						//echo $mytime;						
 					?>					
 					<div class="form-group startdt">
 						<label for="dtp_input1" class="col-form-label">Start Date/Time</label>
-						<div class="input-group date form_datetime"  data-link-field="dtp_input1">
-							<input class="form-control" size="16" type="text" value="" readonly>
+						<div class="input-group date form_from"  data-link-field="dtp_input1">
+							<input class="form-control" size="16" type="text"  value="" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 						</div>
@@ -2173,14 +2196,56 @@
 					<div class="form-group stopdt">
 						<label for="dtp_input2" class="col-form-label">Stop Date/Time</label>
 						<!--<div class="input-group date form_datetime" data-date="2021-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input2">-->
-						<div class="input-group date form_datetime" data-link-field="dtp_input2">
+						<div class="input-group date form_to"  data-link-field="dtp_input2">
+							<!--<input class="form-control" size="16" type="text" value="" readonly>-->
 							<input class="form-control" size="16" type="text" value="" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 						</div>
 						<input type="hidden" id="dtp_input2" value="" name="dtp_input2" /><br/>
 					</div>				
-					 
+					 <label >Adjust Second Segments</label>
+                     <div class="form-group startsec">
+                        <label for="startsec">Start Sec:</label>
+                        <select id="startsec" class="form-control" name="startsec" >
+						   <option value="x">select...</option>
+						   <?php
+						   $i = 0;
+							while(true){										
+								echo '<option value="0' .$i. '">0' .$i. '</option>';
+								if($i == 9)break;
+								$i++;
+							}
+						   $i = 10;
+							while(true){										
+								echo '<option value="' .$i. '">' .$i. '</option>';
+								if($i == 60)break;
+								$i++;
+							}
+						   ?>  
+                        </select>
+                     </div>
+
+                     <div class="form-group stopsec">
+                        <label for="stopsec">Stop Sec:</label>
+                        <select id="stopsec" class="form-control" name="stopsec" >                           
+						   <option value="x">select...</option>
+						   <?php
+						   $i = 0;
+							while(true){										
+								echo '<option value="0' .$i. '">0' .$i. '</option>';
+								if($i == 9)break;
+								$i++;
+							}
+						   $i = 10;
+							while(true){										
+								echo '<option value="' .$i. '">' .$i. '</option>';
+								if($i == 60)break;
+								$i++;
+							}
+						   ?>                          
+                        </select>
+                     </div>
 					 
 					 
                   </div>
@@ -2213,6 +2278,13 @@
            var modal = $(this)
            modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
            
+		   
+			
+		//var startdt = new Date(startdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
+		//var stopdt = new Date(stopdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
+			
+		   
+		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
            modal.find('.modal-body .startdt input').val(startdt);   
@@ -3456,6 +3528,30 @@ function download_porttymon_script(filename, text) {
 		-->
 		<script type="text/javascript" src="dt-files/x/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script type="text/javascript" src="dt-files/x/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<script>
+    var today = new Date();
+    $('.form_from').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        autoclose: true,
+        todayBtn: true,
+		minuteStep: 1,	
+		todayHighlight: 1,		
+        startDate : today			
+    }).on('changeDate', function(ev){
+        $('#to').datetimepicker('setStartDate', ev.date);
+    });
+    
+    $('.form_to').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        autoclose: true,
+        todayBtn: true,
+		minuteStep: 1,	
+		todayHighlight: 1,
+        startDate : today
+    }).on('changeDate', function(ev){
+        $('#from').datetimepicker('setEndDate', ev.date);
+    });
+</script>
 		
 <script type="text/javascript">
     // $('.form_datetime').datetimepicker({});
@@ -3464,14 +3560,15 @@ function download_porttymon_script(filename, text) {
         var date = today.getFullYear()+'-'+(today.getMonth())+'-'+today.getDate();
         var time = today.getHours() + ":" + today.getMinutes();
         var dateTime = date+' '+time;	 */
-		var today = new Date();
+	/* 	var today = new Date();
 	
 	
 	
        $('.form_datetime').datetimepicker({
 			//language:  'fr',
 			//locale: 'ru',
-			format: 'yyyy-mm-dd hh:ii:ss',
+			//format: 'yyyy-mm-dd hh:ii:ss',
+			format: 'yyyy-mm-dd hh:ii',
 			weekStart: 1,
 			todayBtn:  1,
 			autoclose: 1,
@@ -3481,7 +3578,7 @@ function download_porttymon_script(filename, text) {
 			minuteStep: 1,			
 			showMeridian: 1,
 			startDate: today
-		});   
+		});  */  
 /* 	$('.form_date').datetimepicker({
         language:  'fr',
         weekStart: 1,
