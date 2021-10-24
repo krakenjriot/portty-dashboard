@@ -437,7 +437,60 @@
                   
                   } //
                   
+                  if (isset($_POST['set_dt']))
+                  {
+                  /*
+                  pin_name
+                  pin_num
+                  pin_desc
+                  board_name
+                  active
+                  */
+                  $id = $_POST['id'];
+                  $dtp_input1 = $_POST['dtp_input1'];
+                  $dtp_input2 = $_POST['dtp_input2'];
+				  
+				  file_put_contents("dt.txt",$id);
+                
                   
+               /*    if (empty($mytoggle)) $mytoggle = 0;
+                  else $mytoggle = 1; */
+                  
+                  //get board name
+                  $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
+                  $result = mysqli_query($conn, $sql);
+                  $board_name = "";
+                  if (mysqli_num_rows($result) > 0)
+                  {
+					  // output data of each row
+					  while ($row = mysqli_fetch_assoc($result))
+					  {
+						  $board_name = $row['board_name'];
+					  }
+                  }
+                  
+                  $sql = "UPDATE tbl_pins SET " .                  
+                  " startdt = '$dtp_input1', " .
+                  " stopdt = '$dtp_input2' " .                  
+                  "WHERE id = '$id' ";
+                  
+                  if ($conn->query($sql) === true)
+                  {				  
+					  //update url				  
+					  //update_pins($board_name);
+					  
+					  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
+					  exit();
+                  }
+                  else
+                  {
+					  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
+					  exit();
+                  }
+                  
+                  
+                  
+                  } //                  
                   
                   
                   if (isset($_POST['edit_pin']))
@@ -461,40 +514,48 @@
                   $board_name = "";
                   if (mysqli_num_rows($result) > 0)
                   {
-                  // output data of each row
-                  while ($row = mysqli_fetch_assoc($result))
-                  {
-                      $board_name = $row['board_name'];
+					  // output data of each row
+					  while ($row = mysqli_fetch_assoc($result))
+					  {
+						  $board_name = $row['board_name'];
+					  }
                   }
-                  }
-                  
-                  $sql = "UPDATE tbl_pins SET " .
-                  
-                  //" pin_desc = '$pin_desc', " . " pin_name = '$pin_name', " . " active = '$active' " .
-                  " pin_desc = '$pin_desc', " . 
-                  " pin_mode = '$pin_mode', " . 
-				  " pin_name = '$pin_name' " .
-                  
-                  "WHERE id = '$id' ";
-                  
+				  
+				  
+                  if($pin_mode == "manual"){
+					  $sql = "UPDATE tbl_pins SET " .                  					  
+					  " pin_desc = '$pin_desc', " . 
+					  " pin_mode = '$pin_mode', " . 
+					  " pin_name = '$pin_name' " .                  
+					  "WHERE id = '$id' ";	
+					  
+				  } else {
+					  $sql = "UPDATE tbl_pins SET " .                  					  
+					  " active = 0, " . 
+					  " pin_desc = '$pin_desc', " . 
+					  " pin_mode = '$pin_mode', " . 
+					  " pin_name = '$pin_name' " .                  
+					  "WHERE id = '$id' ";					  
+				  }
+  
+				 
                   if ($conn->query($sql) === true)
-                  {
-                  
-                  //*********** UPDATE UPDATE UPDATE ************************
-                  //*********** UPDATE UPDATE UPDATE ************************
-                  //*********** UPDATE UPDATE UPDATE ************************
-                  //*********** UPDATE UPDATE UPDATE ************************
-                  //update url
-                  //update_list($board_name);
-                  
-                  header("location: ?p=4&pin_notif=update-pin-success#mark-pin");
-                  exit();
+                  {					  
+					  //*********** UPDATE UPDATE UPDATE ************************
+					  //*********** UPDATE UPDATE UPDATE ************************
+					  //*********** UPDATE UPDATE UPDATE ************************
+					  //*********** UPDATE UPDATE UPDATE ************************
+					  //update url
+					  //update_list($board_name);
+					  update_pins($board_name);
+					  header("location: ?p=4&pin_notif=update-pin-success#mark-pin");
+					  exit();
                   }
                   else
                   {
-                  //header("location: ?p=4&pin_notif=" . $conn->error . "#mark-pin");
-                  header("location: ?p=4&pin_notif=update-pin-failed#mark-pin");
-                  exit();
+					  //header("location: ?p=4&pin_notif=" . $conn->error . "#mark-pin");
+					  header("location: ?p=4&pin_notif=update-pin-failed#mark-pin");
+					  exit();
                   }
                   } //
                   
@@ -927,8 +988,12 @@
       <!-- Bootstrap core JavaScript-->
 	  
 	  
-      <script src="vendor/jquery/jquery.min.js"></script>
-      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      
+	  <script src="vendor/jquery/jquery.min.js"></script>
+	  <!--<script src="https://xcode.jquery.com/jquery-3.6.0.js"></script>
+	  <script type="text/javascript" src="xdt-files/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+      -->
+	  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <!-- Core plugin JavaScript-->
       <script src="vendor/jquery-easing/jquery.easing.min.js"></script>     
       <!-- Custom fonts for this template-->
@@ -942,6 +1007,12 @@
       <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
       <link rel="stylesheet" href="clean-switch/clean-switch.css">
       <script src="js/zingchart.min.js"></script>
+	  
+	  
+    <!--<link href="xdt-files/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">-->
+    <link href="dt-files/x/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	  
+	  
       <!--<script src="https://cdn.zingchart.com/zingchart.min.js"></script>-->
       <style>
          html,
@@ -1917,6 +1988,8 @@
                                     									
                                     									"<td><a href='#' data-toggle='modal' data-target='#set_pin_$pin_mode' class='btn " . $butt_status . " btn-circle btn-sm'
                                     									data-id='" . $row["id"] . "'
+                                    									data-startdt='" . $row["startdt"] . "'
+                                    									data-stopdt='" . $row["stopdt"] . "'
                                     									data-pin_num='" . $row["pin_num"] . "'
                                     									data-pin_name='" . $row["pin_name"] . " '
                                     									data-pin_desc='" . $row["pin_desc"] . "'
@@ -2054,6 +2127,7 @@
          })           
       </script>	
 
+	 
       <div class="modal fade" id="set_pin_set_date_time" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
          <div class="modal-dialog" role="document">
@@ -2071,41 +2145,92 @@
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
-                     <div class="form-group">					
+                   <!--   <div class="form-group">					
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="cl-switch cl-switch-xlarge">
                         <input type="checkbox" class="myswtich" name="mytoggle">
                         <span class="switcher"></span>
                         <span class="label modal-message"></span>
-                        </label>		  
-                     </div>
+                        </label>
+						
+                     </div> -->
+					 
+					<?php 
+						$mytime = date("Y-m-d H:i:s");
+						echo $mytime;
+						
+					?>					
+					<div class="form-group startdt">
+						<label for="dtp_input1" class="col-form-label">Start Date/Time</label>
+						<div class="input-group date form_datetime"  data-link-field="dtp_input1">
+							<input class="form-control" size="16" type="text" value="" readonly>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+						</div>
+						<input type="hidden" id="dtp_input1" value="" name="dtp_input1" /><br/>
+					</div>
+
+					<div class="form-group stopdt">
+						<label for="dtp_input2" class="col-form-label">Stop Date/Time</label>
+						<!--<div class="input-group date form_datetime" data-date="2021-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input2">-->
+						<div class="input-group date form_datetime" data-link-field="dtp_input2">
+							<input class="form-control" size="16" type="text" value="" readonly>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+						</div>
+						<input type="hidden" id="dtp_input2" value="" name="dtp_input2" /><br/>
+					</div>				
+					 
+					 
+					 
                   </div>
                   <div class="modal-footer"> 
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
-                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                     <button type="submit" class="btn btn-primary" name="set_dt" >Submit</button>
                   </div>
                </form>
             </div>
          </div>
       </div>
-      <script type="text/javascript">
-         $('#set_pin_set_date_time').on('show.bs.modal', function (event) {
+
+ <script type="text/javascript">
+
+    
+		 
+		 $('#set_pin_set_date_time').on('show.bs.modal', function (event) {	
+			
+   
+   		
+		 
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
+           var startdt = link.data('startdt') // Extract info from data-* attributes
+           var stopdt = link.data('stopdt') // Extract info from data-* attributes
            var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
            modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
-           //modal.find('.modal-body input').val(recipient)
-           modal.find('.modal-body .modal-message').text(pin_desc)		   
-           //modal.find('.modal-body .cl-switch input').text(active)		   
+           
+           modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
-         })           
-      </script>	
+           modal.find('.modal-body .startdt input').val(startdt);   
+           modal.find('.modal-body .stopdt input').val(stopdt);   
+             
+           //modal.find('.modal-body .cl-switch input').prop( "checked", active );
 
+
+
+         })
+		 
+		 
+		 
+		 
+      </script>	
+	  
+
+	
 
       <div class="modal fade" id="set_pin_set_time" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -3308,8 +3433,10 @@ function download_porttymon_script(filename, text) {
            });
          });
       </script>
+	  
       <!-- Custom scripts for all pages-->
       <script src="js/sb-admin-2.min.js"></script>
+	  <script src="vendor/jquery/jquery.min.js"></script>
       <!-- Page level plugins -->
       <!--<script src="vendor/chart.js/Chart.min.js"></script>-->
       <!-- Page level custom scripts -->
@@ -3320,7 +3447,67 @@ function download_porttymon_script(filename, text) {
       <script src="vendor/datatables/jquery.dataTables.min.js"></script>
       <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
       <!-- Page level custom scripts -->
-      <!--<script src="js/demo/datatables-demo.js"></script>-->
+      <!--<script src="js/demo/datatables-demo.js"></script>-->	  
+	  <!--
+		<script type="text/javascript" src="xdt-files/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+		
+		<script src="https://xcode.jquery.com/jquery-3.6.0.js"></script>
+		<script type="text/javascript" src="xxx./bootstrap/js/bootstrap.min.js"></script>
+		-->
+		<script type="text/javascript" src="dt-files/x/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="dt-files/x/js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+		
+<script type="text/javascript">
+    // $('.form_datetime').datetimepicker({});
+      /*   var today = new Date();
+        //var date = today.getFullYear()+'-'+(today.getMonth()+3)+'-'+today.getDate();
+        var date = today.getFullYear()+'-'+(today.getMonth())+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes();
+        var dateTime = date+' '+time;	 */
+		var today = new Date();
+	
+	
+	
+       $('.form_datetime').datetimepicker({
+			//language:  'fr',
+			//locale: 'ru',
+			format: 'yyyy-mm-dd hh:ii:ss',
+			weekStart: 1,
+			todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			forceParse: 0,
+			minuteStep: 1,			
+			showMeridian: 1,
+			startDate: today
+		});   
+/* 	$('.form_date').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+	$('.form_time').datetimepicker({
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 1,
+		minView: 0,
+		maxView: 1,
+		forceParse: 0
+    }); */
+</script>
+
+
+	  
+
       <?php mysqli_close($conn); ?>
    </body>
 </html>
