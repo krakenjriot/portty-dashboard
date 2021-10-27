@@ -125,33 +125,86 @@
 
 
 
-/*  $sql0 = "SELECT * FROM tbl_boards";
-    $result0 = mysqli_query($conn, $sql0);         
-    $board_name = "";
-    if (mysqli_num_rows($result0) > 0)
+    $sql = "SELECT * FROM tbl_pins";
+    $result = mysqli_query($conn, $sql);         
+    $pin_mode = "";
+    if (mysqli_num_rows($result) > 0)
 	{
 			// output data of each row
-            while ($row = mysqli_fetch_assoc($result0))
+            while ($row = mysqli_fetch_assoc($result))
             {				
+				$id = $row['id'];
+				$pin_mode = $row['pin_mode'];
 				$board_name = $row['board_name'];
-				//*************************************************		
-				//*************************************************		
-				//*************************************************
-				 $sql = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
-				 $result = mysqli_query($conn, $sql);         
-				 $curr_ts_from_db = "";
-				 if (mysqli_num_rows($result) > 0)
-				 {
-					 // output data of each row
-					 while ($row = mysqli_fetch_assoc($result))
-					 {
-						 
-					 }
-				 }				 
+				/******************************************/		
+				/******************************************/
+				$sql2 = "SELECT * FROM tbl_boards WHERE board_name = '$board_name' ";
+				$result2 = mysqli_query($conn, $sql2);         
+				//$pin_mode = "";
+				if (mysqli_num_rows($result2) > 0)
+				{
+						// output data of each row
+						while ($row2 = mysqli_fetch_assoc($result2))
+						{				
+							$monitor_name = $row2['monitor_name'];	
+						}
+				}										
+				
+				
+				$sql1 = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
+				$result1 = mysqli_query($conn, $sql1);         
+				//$pin_mode = "";
+				if (mysqli_num_rows($result1) > 0)
+				{
+						// output data of each row
+						while ($row1 = mysqli_fetch_assoc($result1))
+						{				
+							$monitor_timezone = $row1['monitor_timezone'];	
+						}
+				}						
+				/******************************************/		
+				/******************************************/
+				date_default_timezone_set($monitor_timezone);
+				//file_put_contents("test.txt", $monitor_timezone );	
+				if($pin_mode == "set_date_time"){								
+					if((time() > strtotime($row['startdt'])) &&
+						(time() < strtotime($row['stopdt'])) ){							
+						/****************************************/
+						$sql0 = "UPDATE tbl_pins SET " . 		 
+						" active = 1 " . 
+						" WHERE id = $id ";
+						$conn->query($sql0);
+						/****************************************/	
+						//file_put_contents("test.txt", "active" );	
+					} else {
+						/****************************************/
+						$sql0 = "UPDATE tbl_pins SET " . 		 
+						" active = 0 " . 
+						" WHERE id = $id ";
+						$conn->query($sql0);
+						/****************************************/								
+						//file_put_contents("test.txt", "inactive" );
+					}						
+				}							
+				/******************************************/
+				/******************************************/
+				/******************************************/
+				/******************************************/
+				if($pin_mode == "set_pin_set_time"){
+						
+				}
+				/******************************************/
+				/******************************************/
+				if($pin_mode == "set_pin_set_total_seconds"){
+							
+				}
+				/******************************************/
+				/******************************************/
+				update_pins($board_name);	
 			}
-	} */
-
-
-
+	} 
+	
+	//file_put_contents("time.txt", time() );	
+	//file_put_contents("testxxxx.txt",$id);		
 
 ?>

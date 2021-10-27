@@ -223,14 +223,6 @@
              }
          } 
 
-
-
-
-
-
-
-
-		 
          //create board list
          //create board list
          //create board list
@@ -422,7 +414,7 @@
                   if ($conn->query($sql) === true)
                   {				  
 					  //update url				  
-					  update_pins($board_name);
+					  //update_pins($board_name);
 					  
 					  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
 					  exit();
@@ -492,6 +484,9 @@
 						  $board_name = $row['board_name'];
 					  }
                   }
+				  
+				  
+				  
                   
                   $sql = "UPDATE tbl_pins SET " .                  
                   " startdt = '$starttime', " .
@@ -571,7 +566,7 @@
 					  //*********** UPDATE UPDATE UPDATE ************************
 					  //update url
 					  //update_list($board_name);
-					  update_pins($board_name);
+					  //update_pins($board_name);
 					  header("location: ?p=4&pin_notif=update-pin-success#mark-pin");
 					  exit();
                   }
@@ -992,7 +987,7 @@
                         //update api based
                         //update_list($board_name);
                         //create_batch_file_monitor($board_name);
-						update_pins($board_name);
+						//update_pins($board_name);
                         
                         header("location: ?p=4&board_notif=new-board-added-successfull#mark-board");
                         exit();
@@ -2198,7 +2193,7 @@
 						<!--<div class="input-group date form_datetime" data-date="2021-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input2">-->
 						<div class="input-group date form_to"  data-link-field="dtp_input2">
 							<!--<input class="form-control" size="16" type="text" value="" readonly>-->
-							<input class="form-control" size="16" type="text" value="" readonly>
+							<input class="form-control" size="16" type="text" value="" readonly>							
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
 						</div>
@@ -2247,6 +2242,10 @@
                         </select>
                      </div>
 					 
+      			 
+					 
+					 
+					 
 					 
                   </div>
                   <div class="modal-footer"> 
@@ -2263,10 +2262,6 @@
     
 		 
 		 $('#set_pin_set_date_time').on('show.bs.modal', function (event) {	
-			
-   
-   		
-		 
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
@@ -2280,8 +2275,8 @@
            
 		   
 			
-		//var startdt = new Date(startdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
-		//var stopdt = new Date(stopdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
+			//var startdt = new Date(startdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
+			//var stopdt = new Date(stopdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
 			
 		   
 		   
@@ -2315,20 +2310,129 @@
                      <span aria-hidden="true">×</span>
                      </button>
                   </div>
-				  set_pin_set_time
+				  
                   <div class="modal-body">
                      <div class="form-group id">
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
-                     <div class="form-group">					
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="cl-switch cl-switch-xlarge">
-                        <input type="checkbox" class="myswtich" name="mytoggle">
-                        <span class="switcher"></span>
-                        <span class="label modal-message"></span>
-                        </label>		  
+                     <div class="form-group">
+						 <div class="form-group stopsec">
+							<label for="stopsec">Time (Hour):</label>
+							<select id="stopsec" class="form-control" name="time_hour" >                           
+							   <option value="x">select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
                      </div>
+					 
+                     <div class="form-group">
+						 <div class="form-group stopsec">
+							<label for="stopsec">Time (Minute):</label>
+							<select id="stopsec" class="form-control" name="time_min" >                           
+							   <option value="x">select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+					</br>					 
+					</br>					 
+					 
+                     <div class="form-group">
+						 <div class="form-group stopsec">
+							<label for="stopsec">Duration(Second):</label>
+							<select id="stopsec" class="form-control" name="dur_sec" >                           
+							   <option value="0">00</option>
+							   <?php
+							   $i = 1;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>						 
+
+                     <div class="form-group">
+						 <div class="form-group stopsec">
+							<label for="stopsec">Duration(Minute):</label>
+							<select id="stopsec" class="form-control" name="dur_min" >                           
+							   <option value="0">00</option>
+							   <?php
+							   $i = 1;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+
+                     <div class="form-group">
+						 <div class="form-group stopsec">
+							<label for="stopsec">Duration(Hour):</label>
+							<select id="stopsec" class="form-control" name="dur_hour" >                           
+							   <option value="0">00</option>
+							   <?php
+							   $i = 1;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+					 
                   </div>
                   <div class="modal-footer"> 
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
@@ -3535,10 +3639,12 @@ function download_porttymon_script(filename, text) {
         autoclose: true,
         todayBtn: true,
 		minuteStep: 1,	
-		todayHighlight: 1,		
+		todayHighlight: 1,	
+		//pickDate:false,
+		//showTimezone: true,	
         startDate : today			
     }).on('changeDate', function(ev){
-        $('#to').datetimepicker('setStartDate', ev.date);
+        $('.form_to').datetimepicker('setStartDate', ev.date);
     });
     
     $('.form_to').datetimepicker({
@@ -3547,9 +3653,11 @@ function download_porttymon_script(filename, text) {
         todayBtn: true,
 		minuteStep: 1,	
 		todayHighlight: 1,
+		//pickDate:false,
+		//showTimezone: true,
         startDate : today
     }).on('changeDate', function(ev){
-        $('#from').datetimepicker('setEndDate', ev.date);
+        $('.form_from').datetimepicker('setEndDate', ev.date);
     });
 </script>
 		
