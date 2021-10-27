@@ -55,8 +55,7 @@
 					" WHERE monitor_name = '$monitor_name' ";
 					$monitor_stat = true;
 				}
-					if ($conn->query($sql7) === true);
-					
+					if ($conn->query($sql7) === true);					
 				
 				//*************************************************		
 				//*************************************************		
@@ -190,8 +189,25 @@
 				/******************************************/
 				/******************************************/
 				/******************************************/
-				if($pin_mode == "set_pin_set_time"){
-						
+				if($pin_mode == "set_time"){
+					if((time() > strtotime($row['startdt'])) &&
+						(time() < strtotime($row['stopdt'])) ){							
+						/****************************************/
+						$sql0 = "UPDATE tbl_pins SET " . 		 
+						" active = 1 " . 
+						" WHERE id = $id ";
+						$conn->query($sql0);
+						/****************************************/	
+						//file_put_contents("test.txt", "active" );	
+					} else {
+						/****************************************/
+						$sql0 = "UPDATE tbl_pins SET " . 		 
+						" active = 0 " . 
+						" WHERE id = $id ";
+						$conn->query($sql0);
+						/****************************************/								
+						//file_put_contents("test.txt", "inactive" );
+					}												
 				}
 				/******************************************/
 				/******************************************/

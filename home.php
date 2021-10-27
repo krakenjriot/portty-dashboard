@@ -430,87 +430,179 @@
                   } //
                   
                   if (isset($_POST['set_dt']))
-                  {
-                  /*
-                  pin_name
-                  pin_num
-                  pin_desc
-                  board_name
-                  active
-                  */
-                  $id = $_POST['id'];
-                  $dtp_input1 = $_POST['dtp_input1'];
-                  $dtp_input2 = $_POST['dtp_input2'];
-                  
-                  
-				  
-				$year1 = date("Y", strtotime($dtp_input1));
-				$day1 = date("d", strtotime($dtp_input1));
-				$month1 = date("m", strtotime($dtp_input1));
-				$hour1 = date("H", strtotime($dtp_input1));
-				$minute1 = date("i", strtotime($dtp_input1));
-				$second1 = $_POST['startsec'];
-				$starttime = ($year1 . "-" . $month1 . "-" . $day1 . " " . $hour1 . ":" . $minute1 . ":" . $second1);	
-
-				$year2 = date("Y", strtotime($dtp_input2));
-				$day2 = date("d", strtotime($dtp_input2));
-				$month2 = date("m", strtotime($dtp_input2));
-				$hour2 = date("H", strtotime($dtp_input2));
-				$minute2 = date("i", strtotime($dtp_input2));
-				$second2 = $_POST['stopsec'];				  
-				$stoptime = ($year2 . "-" . $month2 . "-" . $day2 . " " . $hour2 . ":" . $minute2 . ":" . $second2);	
-				
-				if($second1 == "x") $starttime = $dtp_input1;
-				if($second2 == "x") $stoptime = $dtp_input2;
-				
-
-				if(strtotime($starttime) > strtotime($stoptime)){
-					header("location: ?p=4&pin_notif=failed-update-reason-starttime-greater-than-stoptime&$mytoggle#mark-pin");
-					exit();					
-				}
-
-
-
-				
-                  //get board name
-                  $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
-                  $result = mysqli_query($conn, $sql);
-                  $board_name = "";
-                  if (mysqli_num_rows($result) > 0)
-                  {
-					  // output data of each row
-					  while ($row = mysqli_fetch_assoc($result))
 					  {
-						  $board_name = $row['board_name'];
-					  }
-                  }
-				  
-				  
-				  
-                  
-                  $sql = "UPDATE tbl_pins SET " .                  
-                  " startdt = '$starttime', " .
-                  " stopdt = '$stoptime' " .                  
-                  "WHERE id = '$id' ";
-                  
-                  if ($conn->query($sql) === true)
-                  {				  
-					  //update url				  
-					  //update_pins($board_name);
+					  /*
+					  pin_name
+					  pin_num
+					  pin_desc
+					  board_name
+					  active
+					  */
+					  $id = $_POST['id'];
+					  $dtp_input1 = $_POST['dtp_input1'];
+					  $dtp_input2 = $_POST['dtp_input2'];
 					  
-					  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
-					  exit();
-                  }
-                  else
-                  {
-					  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
-					  exit();
-                  }
-                  
+					  
+					  
+					$year1 = date("Y", strtotime($dtp_input1));
+					$day1 = date("d", strtotime($dtp_input1));
+					$month1 = date("m", strtotime($dtp_input1));
+					$hour1 = date("H", strtotime($dtp_input1));
+					$minute1 = date("i", strtotime($dtp_input1));
+					$second1 = $_POST['startsec'];
+					$starttime = ($year1 . "-" . $month1 . "-" . $day1 . " " . $hour1 . ":" . $minute1 . ":" . $second1);	
+
+					$year2 = date("Y", strtotime($dtp_input2));
+					$day2 = date("d", strtotime($dtp_input2));
+					$month2 = date("m", strtotime($dtp_input2));
+					$hour2 = date("H", strtotime($dtp_input2));
+					$minute2 = date("i", strtotime($dtp_input2));
+					$second2 = $_POST['stopsec'];				  
+					$stoptime = ($year2 . "-" . $month2 . "-" . $day2 . " " . $hour2 . ":" . $minute2 . ":" . $second2);	
+					
+					if($second1 == "x") $starttime = $dtp_input1;
+					if($second2 == "x") $stoptime = $dtp_input2;
+					
+
+					if(strtotime($starttime) > strtotime($stoptime)){
+						header("location: ?p=4&pin_notif=failed-update-reason-starttime-greater-than-stoptime&$mytoggle#mark-pin");
+						exit();					
+					}
+
+
+
+					
+					  //get board name
+					  $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
+					  $result = mysqli_query($conn, $sql);
+					  $board_name = "";
+					  if (mysqli_num_rows($result) > 0)
+					  {
+						  // output data of each row
+						  while ($row = mysqli_fetch_assoc($result))
+						  {
+							  $board_name = $row['board_name'];
+						  }
+					  }
+					  
+					  
+					  
+					  
+					  $sql = "UPDATE tbl_pins SET " .                  
+					  " startdt = '$starttime', " .
+					  " stopdt = '$stoptime' " .                  
+					  "WHERE id = '$id' ";
+					  
+					  if ($conn->query($sql) === true)
+					  {				  
+						  //update url				  
+						  //update_pins($board_name);
+						  
+						  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  else
+					  {
+						  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  
                   
                   
                   } //                  
                   
+                if (isset($_POST['set_time']))
+				{
+					  /*
+					  pin_name
+					  pin_num
+					  pin_desc
+					  board_name
+					  active
+					  */
+					$id = $_POST['id'];
+
+					  
+					$dur_sec = $_POST['dur_sec'];
+					$dur_min = $_POST['dur_min'];
+					$dur_hour = $_POST['dur_hour'];
+					  
+
+					$year = date("Y");
+					$month = date("m");
+					$day = date("d");
+					//$today = date("Y-m-d H:i:s"); 
+					
+					$hour = $_POST['time_hour'];
+					$minute = $_POST['time_min'];
+					$second = $_POST['time_sec'];
+					
+					$startdt = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . $second;	
+					//file_put_contents("today.txt", $today);
+					//file_put_contents("startdt.txt", $startdt);
+					
+					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + ($dur_hour*60*60) + ($dur_min*60) + ($dur_sec));	
+					//file_put_contents("stopdt.txt", $stopdt);
+					  
+
+/* 
+					if(strtotime($starttime) > strtotime($stoptime)){
+						header("location: ?p=4&pin_notif=failed-update-reason-starttime-greater-than-stoptime&$mytoggle#mark-pin");
+						exit();					
+					} */
+
+
+
+					
+					 /*  //get board name
+					  $sql = "SELECT * FROM tbl_pins WHERE id = '$id' ";
+					  $result = mysqli_query($conn, $sql);
+					  $board_name = "";
+					  if (mysqli_num_rows($result) > 0)
+					  {
+						  // output data of each row
+						  while ($row = mysqli_fetch_assoc($result))
+						  {
+							  $board_name = $row['board_name'];
+						  }
+					  } */
+					  
+					  					
+					
+					
+					
+					
+					
+					  
+					  
+					  $sql = "UPDATE tbl_pins SET " .                  
+					  " startdt 	= '$startdt', " .
+					  " stopdt 		= '$stopdt', " .
+					  " time_hour 	= '$hour', " .
+					  " time_min 	= '$minute', " .
+					  " time_sec 	= '$second', " .
+					  " dur_sec 	= '$dur_sec', " .
+					  " dur_min 	= '$dur_min', " .
+					  " dur_hour 	= '$dur_hour' " .                  
+					  " WHERE id 	= '$id' ";
+					  
+					  if ($conn->query($sql) === true)
+					  {	
+						  
+						  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  else
+					  {
+						  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  
+                  
+                  
+                  } // -------   
+
+
                   
                   if (isset($_POST['edit_pin']))
                   {
@@ -1993,7 +2085,7 @@
                                                 $toggle_value = false;
                                             }
                                     
-											$pin_mode= $row["pin_mode"];
+											//$pin_mode= $row["pin_mode"];
 											
                                             echo "<tr>" . "<td><a href='#' data-toggle='modal' data-target='#editPin' class='btn btn-primary btn-circle btn-sm' 
                                     									data-id='" . $row["id"] . "' 
@@ -2004,11 +2096,18 @@
                                     									data-board_name='" . $row["board_name"] . "'														
                                     									data-active='" . $row["active"] . "'														
                                     									><i class='far fa-edit fa-2x'></i></a></td>" . 
-                                    									
-                                    									"<td><a href='#' data-toggle='modal' data-target='#set_pin_$pin_mode' class='btn " . $butt_status . " btn-circle btn-sm'
+																	
+																		
+                                    									"<td><a href='#' data-toggle='modal' data-target='#set_pin_". $row["pin_mode"] ."' class='btn " . $butt_status . " btn-circle btn-sm'
                                     									data-id='" . $row["id"] . "'
                                     									data-startdt='" . $row["startdt"] . "'
-                                    									data-stopdt='" . $row["stopdt"] . "'
+                                    									data-stopdt='" . $row["stopdt"] . "'																		
+                                    									data-time_hour='" . $row["time_hour"] . "'
+                                    									data-time_min='" . $row["time_min"] . "'
+                                    									data-time_sec='" . $row["time_sec"] . "'
+                                    									data-dur_sec='" . $row["dur_sec"] . "'
+                                    									data-dur_min='" . $row["dur_min"] . "'
+                                    									data-dur_hour='" . $row["dur_hour"] . "'
                                     									data-pin_num='" . $row["pin_num"] . "'
                                     									data-pin_name='" . $row["pin_name"] . " '
                                     									data-pin_desc='" . $row["pin_desc"] . "'
@@ -2267,18 +2366,14 @@
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
            var startdt = link.data('startdt') // Extract info from data-* attributes
            var stopdt = link.data('stopdt') // Extract info from data-* attributes
-           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           
+		   
+		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
            modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
            
-		   
-			
-			//var startdt = new Date(startdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
-			//var stopdt = new Date(stopdt * 1000).toISOString().slice(0, 19).replace('T', ' ')
-			
-		   
 		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
@@ -2317,10 +2412,10 @@
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
                      <div class="form-group">
-						 <div class="form-group stopsec">
-							<label for="stopsec">Time (Hour):</label>
-							<select id="stopsec" class="form-control" name="time_hour" >                           
-							   <option value="x">select...</option>
+						 <div class="form-group time_hour">
+							<label for="time_hour">Time (Hour):</label>
+							<select id="time_hour" class="form-control" name="time_hour" >                           
+							   <option value="x" class="default-time_hour" selected >select...</option>
 							   <?php
 							   $i = 0;
 								while(true){										
@@ -2340,10 +2435,10 @@
                      </div>
 					 
                      <div class="form-group">
-						 <div class="form-group stopsec">
-							<label for="stopsec">Time (Minute):</label>
-							<select id="stopsec" class="form-control" name="time_min" >                           
-							   <option value="x">select...</option>
+						 <div class="form-group time_min">
+							<label for="time_min">Time (Minute):</label>
+							<select id="time_min" class="form-control" name="time_min" >                           
+							   <option value="x" class="default-time_min" selected >select...</option>
 							   <?php
 							   $i = 0;
 								while(true){										
@@ -2360,17 +2455,39 @@
 							   ?>                          
 							</select>
 						 </div>	
-                     </div>	
-					</br>					 
+                     </div>
+                     <div class="form-group">
+						 <div class="form-group time_sec">
+							<label for="time_sec">Time (Second):</label>
+							<select id="time_sec" class="form-control" name="time_sec" >                           
+							   <option value="x" class="default-time_sec" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>					 
+					</>					 
 					</br>					 
 					 
                      <div class="form-group">
-						 <div class="form-group stopsec">
-							<label for="stopsec">Duration(Second):</label>
-							<select id="stopsec" class="form-control" name="dur_sec" >                           
-							   <option value="0">00</option>
+						 <div class="form-group dur_sec">
+							<label for="dur_sec">Duration(Second):</label>
+							<select id="dur_sec" class="form-control" name="dur_sec" >                           
+							   <option value="x" class="default-dur_sec" selected >select...</option>
 							   <?php
-							   $i = 1;
+							   $i = 0;
 								while(true){										
 									echo '<option value="0' .$i. '">0' .$i. '</option>';
 									if($i == 9)break;
@@ -2388,12 +2505,12 @@
                      </div>						 
 
                      <div class="form-group">
-						 <div class="form-group stopsec">
-							<label for="stopsec">Duration(Minute):</label>
-							<select id="stopsec" class="form-control" name="dur_min" >                           
-							   <option value="0">00</option>
+						 <div class="form-group dur_min">
+							<label for="dur_min">Duration(Minute):</label>
+							<select id="dur_min" class="form-control" name="dur_min" >                           
+							   <option value="x" class="default-dur_min" selected >select...</option>
 							   <?php
-							   $i = 1;
+							   $i = 0;
 								while(true){										
 									echo '<option value="0' .$i. '">0' .$i. '</option>';
 									if($i == 9)break;
@@ -2411,12 +2528,12 @@
                      </div>	
 
                      <div class="form-group">
-						 <div class="form-group stopsec">
-							<label for="stopsec">Duration(Hour):</label>
-							<select id="stopsec" class="form-control" name="dur_hour" >                           
-							   <option value="0">00</option>
+						 <div class="form-group dur_hour">
+							<label for="dur_hour">Duration(Hour):</label>
+							<select id="dur_hour" class="form-control" name="dur_hour" >                           
+							   <option value="x" class="default-dur_hour" selected >select...</option>
 							   <?php
-							   $i = 1;
+							   $i = 0;
 								while(true){										
 									echo '<option value="0' .$i. '">0' .$i. '</option>';
 									if($i == 9)break;
@@ -2436,27 +2553,58 @@
                   </div>
                   <div class="modal-footer"> 
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
-                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                     <button type="submit" class="btn btn-primary" name="set_time" >Submit</button>
                   </div>
                </form>
             </div>
          </div>
       </div>
+ 
+	  
       <script type="text/javascript">
          $('#set_pin_set_time').on('show.bs.modal', function (event) {
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
-           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           
+		   var startdt = link.data('startdt') // Extract info from data-* attributes
+           var stopdt = link.data('stopdt') // Extract info from data-* attributes
+           var time_hour = link.data('time_hour') // Extract info from data-* attributes
+           var time_min = link.data('time_min') // Extract info from data-* attributes
+           var time_sec = link.data('time_sec') // Extract info from data-* attributes
+           var dur_sec = link.data('dur_sec') // Extract info from data-* attributes
+           var dur_min = link.data('dur_min') // Extract info from data-* attributes
+           var dur_hour = link.data('dur_hour') // Extract info from data-* attributes
+           
+		   
+		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
            modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
-           //modal.find('.modal-body input').val(recipient)
-           modal.find('.modal-body .modal-message').text(pin_desc)		   
-           //modal.find('.modal-body .cl-switch input').text(active)		   
+           
+		   
+           modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+           modal.find('.modal-body .startdt input').val(startdt);   
+           modal.find('.modal-body .stopdt input').val(stopdt);
+		   
+           modal.find('.modal-body .time_hour .default-time_hour').text(time_hour);           	   
+           modal.find('.modal-body .time_min .default-time_min').text(time_min);           	   
+           modal.find('.modal-body .time_sec .default-time_sec').text(time_sec); 
+		   
+           modal.find('.modal-body .dur_sec .default-dur_sec').text(dur_sec);           	   
+           modal.find('.modal-body .dur_min .default-dur_min').text(dur_min);           	   
+           modal.find('.modal-body .dur_hour .default-dur_hour').text(dur_hour); 
+
+           modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
+           modal.find('.modal-body .time_min .default-time_min').val(time_min);           	   
+           modal.find('.modal-body .time_sec .default-time_sec').val(time_sec); 
+		   
+           modal.find('.modal-body .dur_sec .default-dur_sec').val(dur_sec);           	   
+           modal.find('.modal-body .dur_min .default-dur_min').val(dur_min);           	   
+           modal.find('.modal-body .dur_hour .default-dur_hour').val(dur_hour); 
+		   
          })           
       </script>
 
