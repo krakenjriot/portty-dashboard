@@ -1017,7 +1017,7 @@
                         } else {
 							
 							//check if directory exist if not then create
-							if(!is_dir()){
+							if(!is_dir("exe\\conf")){
 								mkdir("exe\\conf");
 							}
 							
