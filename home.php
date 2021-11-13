@@ -1015,6 +1015,13 @@
                                 //update_list($board_name);                                
                             }
                         } else {
+							
+							//check if directory exist if not then create
+							if(!is_dir()){
+								mkdir("exe\\conf");
+							}
+							
+							//check file exist if not then create
 							$filename = "exe\\conf\\.tmp";
 							if (file_exists($filename)) {
 								//echo "The file $filename exists";
