@@ -1214,9 +1214,11 @@
          <!-- Divider
             <hr class="sidebar-divider"> -->
          <!-- Heading -->
-         <div class="sidebar-heading">
+         <!--
+		 <div class="sidebar-heading">
             Interface
          </div>
+		 -->
          <!-- Nav Item - Pages Collapse Menu -->
          <!--
             <li class="nav-item">
@@ -1235,7 +1237,8 @@
                   </li>
             -->
          <!-- Nav Item - Utilities Collapse Menu -->
-         <li class="nav-item">
+         <!--
+		 <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-wrench"></i>
@@ -1250,7 +1253,7 @@
                   <a class="collapse-item" href="#p">Repeating Trigger</a>
                </div>
             </div>
-         </li>
+         </li>-->
          <!-- Nav Item - Utilities Collapse Menu -->
          <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"

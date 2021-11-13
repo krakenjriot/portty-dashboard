@@ -160,7 +160,10 @@
 						{				
 							$monitor_timezone = $row1['monitor_timezone'];	
 						}
-				}						
+				} else {
+							$monitor_timezone = "Asia/Riyadh";	
+				}
+				
 				/******************************************/		
 				/******************************************/
 				date_default_timezone_set($monitor_timezone);
