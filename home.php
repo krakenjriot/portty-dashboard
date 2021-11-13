@@ -1014,7 +1014,20 @@
                                 $board_name = $row['board_name'];
                                 //update_list($board_name);                                
                             }
-                        }
+                        } else {
+							$filename = "exe\\conf\\.tmp";
+							if (file_exists($filename)) {
+								//echo "The file $filename exists";
+								//do nothing
+							} else {
+								//echo "The file $filename does not exist";
+								//create tmp file
+								file_put_contents($filename,"");
+							}							
+						}
+						
+						
+						
                         
                      
                         $sql = "INSERT INTO tbl_monitors (active, monitor_name, monitor_desc, passcode, monitor_location, monitor_timezone, refresh_sec, exe_dir)
@@ -1037,6 +1050,9 @@
 						
 						
                         }
+						
+						
+						
                         
                         if (isset($_POST['submit_board']))
                         {
