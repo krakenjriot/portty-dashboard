@@ -3059,9 +3059,9 @@ function download_porttymon_script(filename, text) {
                      </div>
                      <div class="form-group">
                         <label for="monitor_timezone">monitor_timezone:</label>
-                        <select id="monitor_timezone" class="form-control" name="monitor_timezone" >
-                           <option value="Asia/Manila">Asia/Manila</option>
+                        <select id="monitor_timezone" class="form-control" name="monitor_timezone" >                           
                            <option value="Asia/Riyadh">Asia/Riyadh</option>
+						   <option value="Asia/Manila">Asia/Manila</option>
                         </select>
                      </div>
                      <!--
