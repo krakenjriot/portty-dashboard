@@ -1000,7 +1000,7 @@
                         $monitor_timezone = $_POST['monitor_timezone'];
                         $refresh_sec = $_POST['refresh_sec'];
                         //$htdocs_dir = addslashes($_POST['htdocs_dir']);
-                        //$exe_dir = addslashes($_POST['exe_dir']);
+                        $exe_dir = addslashes($_POST['exe_dir']);
                         $passcode  = $_POST['passcode'];
                         $monitor_name = str_replace(" ", "_", $monitor_name);
                         
@@ -1017,8 +1017,8 @@
                         }
                         
                      
-                        $sql = "INSERT INTO tbl_monitors (active, monitor_name, monitor_desc, passcode, monitor_location, monitor_timezone, refresh_sec)
-                        VALUES (1, '$monitor_name', '$monitor_desc', '$passcode', '$monitor_location', '$monitor_timezone', '$refresh_sec')";
+                        $sql = "INSERT INTO tbl_monitors (active, monitor_name, monitor_desc, passcode, monitor_location, monitor_timezone, refresh_sec, exe_dir)
+                        VALUES (1, '$monitor_name', '$monitor_desc', '$passcode', '$monitor_location', '$monitor_timezone', '$refresh_sec', '$exe_dir')";
                         
                         if ($conn->query($sql) === true)
                         {

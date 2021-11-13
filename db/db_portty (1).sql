@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2021 at 12:41 PM
+-- Generation Time: Nov 13, 2021 at 12:32 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -42,13 +42,6 @@ CREATE TABLE `tbl_boards` (
   `refresh_sec` varchar(2) NOT NULL DEFAULT '3',
   `monitored` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_boards`
---
-
-INSERT INTO `tbl_boards` (`id`, `board_name`, `board_desc`, `board_location`, `monitor_name`, `com_port`, `board_type`, `pins`, `active`, `temp`, `hum`, `refresh_sec`, `monitored`) VALUES
-(2, 'TLPpepPT1kXshdT6', '', '', '2pnlhE1rDIjYUDhh', 'com9', 'uno', '00000000010000000000', 1, 26.7, 40.5, '3', 0);
 
 -- --------------------------------------------------------
 
@@ -103,13 +96,6 @@ CREATE TABLE `tbl_monitors` (
   `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tbl_monitors`
---
-
-INSERT INTO `tbl_monitors` (`id`, `monitor_name`, `monitor_type`, `monitor_desc`, `monitor_location`, `monitor_timezone`, `passcode`, `exe_dir`, `refresh_sec`, `current_ts`, `last_ts`, `active`) VALUES
-(4, '2pnlhE1rDIjYUDhh', 'porttyweb', '', 'default_location', 'Asia/Riyadh', '123456', 'C:\\xampp\\htdocs\\portty-dashboard\\exe', 3, 1635604773, 1635604770, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -133,32 +119,6 @@ CREATE TABLE `tbl_pins` (
   `dur_min` int(2) NOT NULL,
   `dur_hour` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_pins`
---
-
-INSERT INTO `tbl_pins` (`id`, `active`, `pin_num`, `pin_name`, `pin_desc`, `pin_mode`, `board_name`, `startdt`, `stopdt`, `time_hour`, `time_min`, `time_sec`, `dur_sec`, `dur_min`, `dur_hour`) VALUES
-(21, 0, 0, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(22, 0, 1, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(23, 0, 2, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(24, 0, 3, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(25, 0, 4, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(26, 0, 5, 'default_name', 'default_desc', 'set_time', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(27, 0, 6, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(28, 0, 7, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(29, 0, 8, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(30, 1, 9, 'xxxx', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '2021-10-29 16:46:0', '2021-10-29 18:46:00', 16, 46, 0, 0, 0, 2),
-(31, 0, 10, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(32, 0, 11, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(33, 0, 12, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(34, 0, 13, 'default_name', 'default_desc', 'manual', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(35, 0, 14, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(36, 0, 15, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(37, 0, 16, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(38, 0, 17, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(39, 0, 18, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0),
-(40, 0, 19, 'default_name', 'default_desc', '', 'TLPpepPT1kXshdT6', '', '', 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -206,13 +166,6 @@ CREATE TABLE `tbl_settings` (
   `filtered_dht` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `tbl_settings`
---
-
-INSERT INTO `tbl_settings` (`id`, `user_email`, `user_mobile`, `dashboard_ip`, `dashboard_port`, `filtered_pins`, `filtered_dht`) VALUES
-(1, 'rfvillacacan@yahoo.com', '', '192.168.100.4', 80, 'yjYQNL4zDSWetp7f', 'TLPpepPT1kXshdT6');
-
 -- --------------------------------------------------------
 
 --
@@ -227,13 +180,6 @@ CREATE TABLE `tbl_users` (
   `pass` varchar(32) NOT NULL,
   `mobile_number` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_users`
---
-
-INSERT INTO `tbl_users` (`id`, `fname`, `lname`, `email`, `pass`, `mobile_number`) VALUES
-(1, 'ROLLY', 'VILLACACAN', 'rfvillacacan@yahoo.com', 'c4ca4238a0b923820dcc509a6f75849b', '');
 
 --
 -- Indexes for dumped tables
@@ -290,7 +236,7 @@ ALTER TABLE `tbl_users`
 -- AUTO_INCREMENT for table `tbl_boards`
 --
 ALTER TABLE `tbl_boards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_dht`
@@ -308,25 +254,25 @@ ALTER TABLE `tbl_limits`
 -- AUTO_INCREMENT for table `tbl_monitors`
 --
 ALTER TABLE `tbl_monitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_pins`
 --
 ALTER TABLE `tbl_pins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_settings`
 --
 ALTER TABLE `tbl_settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
