@@ -829,48 +829,47 @@
 					 /** ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo **/
 					 /** ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo **/					 
                      if (isset($_POST['delete_monitor']))
-                     {
-					 
-                     $monitor_name = $_POST['monitor_name'];
-                     
-                     //clear monitor name on boards table
-                     $sql = "SELECT * FROM tbl_boards WHERE  monitor_name ='$monitor_name'";
-                     $result = mysqli_query($conn, $sql);
-                     if (mysqli_num_rows($result) > 0)
-                     {
-                         while ($row = mysqli_fetch_assoc($result))
-                         {
-                             $id = $row['id'];
-                             $sql = "UPDATE tbl_boards SET monitor_name = '' WHERE id = '$id' ";
-                             $conn->query($sql);
-                         }
-                     }                     
-                             
-                     //clear monitor name on output table
-                     $sql = "SELECT * FROM tbl_output WHERE  monitor_name ='$monitor_name'";
-                     $result = mysqli_query($conn, $sql);
-                     if (mysqli_num_rows($result) > 0)
-                     {
-                         while ($row = mysqli_fetch_assoc($result))
-                         {
-                             $id = $row['id'];
-                             $sql = "UPDATE tbl_output SET monitor_name = '' WHERE id = '$id' ";
-                             $conn->query($sql);
-                         }
-                     }                     				
-				 				 
-                     // sql to delete a record
-                     $sql = "DELETE FROM tbl_monitors WHERE monitor_name = '$monitor_name'";                     
-                     if (mysqli_query($conn, $sql))
+                     {					 
+						 $monitor_name = $_POST['monitor_name'];
+						 
+						 //clear monitor name on boards table
+						 $sql = "SELECT * FROM tbl_boards WHERE  monitor_name ='$monitor_name'";
+						 $result = mysqli_query($conn, $sql);
+						 if (mysqli_num_rows($result) > 0)
 						 {
-							 //echo "Record deleted successfully";
-							 header("location: ?p=4&monitor_notif=delete-monitor-success#mark-monitor");
-							 exit();
-						 } else {
-							 //echo "Error deleting record: " . mysqli_error($conn);
-							 header("location: ?p=4&monitor_notif=delete-server-failed#mark-monitor");
-							 exit();
-						 }
+							 while ($row = mysqli_fetch_assoc($result))
+							 {
+								 $id = $row['id'];
+								 $sql = "UPDATE tbl_boards SET monitor_name = '' WHERE id = '$id' ";
+								 $conn->query($sql);
+							 }
+						 }						 
+								 
+						 //clear monitor name on output table
+						/*  $sql = "SELECT * FROM tbl_output WHERE  monitor_name ='$monitor_name'";
+						 $result = mysqli_query($conn, $sql);
+						 if (mysqli_num_rows($result) > 0)
+						 {
+							 while ($row = mysqli_fetch_assoc($result))
+							 {
+								 $id = $row['id'];
+								 $sql = "UPDATE tbl_output SET monitor_name = '' WHERE id = '$id' ";
+								 $conn->query($sql);
+							 }
+						 }  */                    				
+									 
+						 // sql to delete a record
+						 $sql = "DELETE FROM tbl_monitors WHERE monitor_name = '$monitor_name'";                     
+						 if (mysqli_query($conn, $sql))
+							 {
+								 //echo "Record deleted successfully";
+								 header("location: ?p=4&monitor_notif=delete-monitor-success#mark-monitor");
+								 exit();
+							 } else {
+								 //echo "Error deleting record: " . mysqli_error($conn);
+								 header("location: ?p=4&monitor_notif=delete-server-failed#mark-monitor");
+								 exit();
+							 }
                      }
 					 /** ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo **/
 					 /** ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo **/
@@ -881,36 +880,42 @@
                      
                      if (isset($_POST['delete_board']))
                      {
-                     $board_name = $_POST['board_name'];
-                     
-                     //$config = include 'config';
-                     //$config['board_name_monitored'] = "";
-                     
-                     //file_put_contents('config', '<?php return ' . var_export($config, true) . ';');
-                        // sql to delete a record
-                        $sql = "DELETE FROM tbl_boards WHERE board_name='$board_name'";
+						 $board_name = $_POST['board_name'];
+						 
+						 //$config = include 'config';
+						 //$config['board_name_monitored'] = "";
+						 
+						 //file_put_contents('config', '<?php return ' . var_export($config, true) . ';');
+							// sql to delete a record
                         
-                        if (mysqli_query($conn, $sql))
-                        {
-                            //
-                            
-                        }
-                        
-                        $sql = "DELETE FROM tbl_url WHERE board_name='$board_name'";
-                        if (mysqli_query($conn, $sql)){}
-                       
-                        
-                        $sql = "SELECT * FROM tbl_boards WHERE  board_name ='$board_name'";
+						
+						
+						//get the monitor name assign to the board
+					/* 	$sql = "SELECT * FROM tbl_boards WHERE  board_name ='$board_name'";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0)
                         {
                             while ($row = mysqli_fetch_assoc($result))
                             {
-                                $server_name = $row['server_name'];
+                                $monitor_name = $row['monitor_name'];
                             }
-                        }
+                        } */
+						
+						
+						
+						
+						//finaly delete the board from board table
+                        $sql = "DELETE FROM tbl_boards WHERE board_name='$board_name'";                        
+                        mysqli_query($conn, $sql);
+
                         
-                        $sql = "SELECT * FROM tbl_servers WHERE  server_name ='$server_name' ";
+                      /*   $sql = "DELETE FROM tbl_url WHERE board_name='$board_name'";
+                        if (mysqli_query($conn, $sql)){} */
+                       
+                        
+ 
+                        
+                       /*  $sql = "SELECT * FROM tbl_servers WHERE  server_name ='$server_name' ";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0)
                         {
@@ -918,7 +923,7 @@
                             {
                                 $exe_dir = $row['exe_dir'];
                             }
-                        }
+                        }  */
                         
                         //delete batch files, output, dht, input, limits
                         $file_batch = "batchfile\\$board_name.porttymon.bat";
