@@ -209,7 +209,7 @@
          
 
 
-         $sql = "SELECT * FROM tbl_settings ";
+         $sql = "SELECT * FROM tbl_settings WHERE id = 1 ";
          $result = mysqli_query($conn, $sql);
          $dashboard_ip = "";
          $dashboard_port = "";
