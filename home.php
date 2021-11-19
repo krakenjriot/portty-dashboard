@@ -686,7 +686,7 @@
                   $sql = "SELECT * FROM tbl_settings ";
                   $result = mysqli_query($conn, $sql);	
                   $count = mysqli_num_rows($result);	
-                  file_put_contents("count.txt", $count);	
+                  //file_put_contents("count.txt", $count);	
                   
                   if($count > 0){
                   //update
@@ -696,13 +696,13 @@
                   " user_mobile = '$user_mobile', " . 
                   " user_email = '$user_email' " . 		
                   "WHERE id = 1 ";	
-                  if ($conn->query($sql) === true) {
-                  //success
-                  //file_put_contents("check.txt", $conn->query($sql));	
-                  } else {
-                  //failed
-                  //file_put_contents("check.txt", $conn->query($sql));	
-                  }		
+					  if ($conn->query($sql) === true) {
+					  //success
+					  //file_put_contents("check.txt", $conn->query($sql));	
+					  } else {
+					  //failed
+					  //file_put_contents("check.txt", $conn->query($sql));	
+					  }		
                   } else {
                   //insert
                   $sql = "INSERT INTO tbl_settings (dashboard_ip, dashboard_port, user_mobile, user_email)
@@ -3417,7 +3417,7 @@ function download_porttymon_script(filename, text) {
          })           
       </script>
       <?php 
-         $sql = "SELECT * FROM tbl_settings ";
+         $sql = "SELECT * FROM tbl_settings WHERE id = 1 ";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0)
             {
