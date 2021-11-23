@@ -614,47 +614,33 @@
 					$id = $_POST['id'];
 
 					  
-					$dur_sec = $_POST['dur_sec'];
-					$dur_min = $_POST['dur_min'];
-					$dur_hour = $_POST['dur_hour'];
+					$start_hour = $_POST['start_hour'];
+					$start_min = $_POST['start_min'];
+					$start_sec = $_POST['start_sec'];					
+					
+					$stop_hour = $_POST['stop_hour'];
+					$stop_min = $_POST['stop_min'];
+					$stop_sec = $_POST['stop_sec'];
+					
+					$tzone = $_POST['tzone'];
+					
+					date_default_timezone_set($tzone);
 					  
+					$dur_start = ($start_hour*60*60) + ($start_min*60) + ($start_sec);	
+					$dur_stop = ($stop_hour*60*60) + ($stop_min*60) + ($stop_sec);	
 
-					$year = date("Y");
-					$month = date("m");
-					$day = date("d");
-					//$today = date("Y-m-d H:i:s"); 
-					
-					$hour = $_POST['time_hour'];
-					$minute = $_POST['time_min'];
-					$second = $_POST['time_sec'];
-					
-					$startdt = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . $second;	
-					//file_put_contents("today.txt", $today);
-					//file_put_contents("startdt.txt", $startdt);
-					
-					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + ($dur_hour*60*60) + ($dur_min*60) + ($dur_sec));	
-					//file_put_contents("stopdt.txt", $stopdt);
-					  
-
-
-					  
-					  					
-					
-					
-					
-					
-					
-					  
+					$startdt = date("Y-m-d H:i:s");	
+					file_put_contents("test5.txt", $startdt);						
+					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $dur_start);					
+					file_put_contents("test6.txt", $stopdt);	
+				  
 					  
 					  $sql = "UPDATE tbl_pins SET " .                  
+					  " active 		= 1, " .
 					  " startdt 	= '$startdt', " .
-					  " stopdt 		= '$stopdt', " .
-					  " time_hour 	= '$hour', " .
-					  " time_min 	= '$minute', " .
-					  " time_sec 	= '$second', " .
-					  " dur_sec 	= '$dur_sec', " .
-					  " dur_min 	= '$dur_min', " .
-					  " dur_hour 	= '$dur_hour' " .                  
+					  " stopdt 		= '$stopdt', " .				
+					  " dur_start 	= '$dur_start', " .
+					  " dur_stop 	= '$dur_stop' " .					                
 					  " WHERE id 	= '$id' ";
 					  
 					  if ($conn->query($sql) === true)
@@ -2177,6 +2163,8 @@
                                     {
                                         $sql = "SELECT * FROM tbl_pins ";
                                     }
+									
+									
                                     
                                     //$sql = "SELECT * FROM tbl_pins ";
                                     $result = mysqli_query($conn, $sql);
@@ -2202,6 +2190,17 @@
                                     
 											//$pin_mode= $row["pin_mode"];
 											
+											
+											$start_hour = floor($row["dur_start"] / 3600);
+											$start_min = floor(($row["dur_start"] / 60) % 60);
+											$start_sec = $row["dur_start"] % 60;
+											
+											$stop_hour = floor($row["dur_stop"] / 3600);
+											$stop_min = floor(($row["dur_stop"] / 60) % 60);
+											$stop_sec = $row["dur_stop"] % 60;
+											//$tzone = "Asia/Riyadh";
+											$tzone = get_tz($row["board_name"]);
+											
                                             echo "<tr>" . "<td><a href='#' data-toggle='modal' data-target='#editPin' class='btn btn-primary btn-circle btn-sm' 
                                     									data-id='" . $row["id"] . "' 
                                     									data-pin_num='" . $row["pin_num"] . "' 
@@ -2211,8 +2210,7 @@
                                     									data-board_name='" . $row["board_name"] . "'														
                                     									data-active='" . $row["active"] . "'														
                                     									><i class='far fa-edit fa-2x'></i></a></td>" . 
-																	
-																		
+																				
                                     									"<td><a href='#' data-toggle='modal' data-target='#set_pin_". $row["pin_mode"] ."' class='btn " . $butt_status . " btn-circle btn-sm'
                                     									data-id='" . $row["id"] . "'
                                     									data-startdt='" . $row["startdt"] . "'
@@ -2226,6 +2224,17 @@
                                     									data-pin_num='" . $row["pin_num"] . "'
                                     									data-pin_name='" . $row["pin_name"] . " '
                                     									data-pin_desc='" . $row["pin_desc"] . "'
+
+                                    									data-start_hour='" . $start_hour . "'
+                                    									data-start_min='" . $start_min . "'
+                                    									data-start_sec='" . $start_sec . "'
+																		
+                                    									data-stop_hour='" . $stop_hour . "'
+                                    									data-stop_min='" . $stop_min . "'
+                                    									data-stop_sec='" . $stop_sec . "'
+                                    									
+																		data-tzone='" . $tzone . "'
+																		
                                     									data-active='" . $toggle_value . "'
                                     									>$mon</a></td>" . "<td>" . $row["board_name"] . "</td>" . "<td>" . $row["pin_num"] . "</td>" . "<td>" . $row["pin_name"] . "</td>" . "<td>" . $row["pin_desc"] . "</td>" . "</tr>";
                                         }
@@ -2712,13 +2721,13 @@
            modal.find('.modal-body .dur_min .default-dur_min').text(dur_min);           	   
            modal.find('.modal-body .dur_hour .default-dur_hour').text(dur_hour); 
 
-/*            modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
+           modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
            modal.find('.modal-body .time_min .default-time_min').val(time_min);           	   
            modal.find('.modal-body .time_sec .default-time_sec').val(time_sec); 
 		   
            modal.find('.modal-body .dur_sec .default-dur_sec').val(dur_sec);           	   
            modal.find('.modal-body .dur_min .default-dur_min').val(dur_min);           	   
-           modal.find('.modal-body .dur_hour .default-dur_hour').val(dur_hour);  */
+           modal.find('.modal-body .dur_hour .default-dur_hour').val(dur_hour);  
 		   
          })           
       </script>
@@ -2741,6 +2750,12 @@
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
+					 
+                     <div class="form-group tzone">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="tzone" name="tzone" hidden>
+                     </div>					 
+					 
                      <div class="form-group">
 						 <div class="form-group start_hour">
 							<label for="start_hour">Start Duration (Hour):</label>
@@ -2895,10 +2910,11 @@
          $('#set_pin_set_start_stop').on('show.bs.modal', function (event) {
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
+           var tzone = link.data('tzone') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
            
-		   var startdt = link.data('startdt') // Extract info from data-* attributes
-           var stopdt = link.data('stopdt') // Extract info from data-* attributes
+		   //var startdt = link.data('startdt') // Extract info from data-* attributes
+           //var stopdt = link.data('stopdt') // Extract info from data-* attributes
            var start_hour = link.data('start_hour') // Extract info from data-* attributes
            var start_min = link.data('start_min') // Extract info from data-* attributes
            var start_sec = link.data('start_sec') // Extract info from data-* attributes
@@ -2915,9 +2931,11 @@
            
 		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
-           modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .startdt input').val(startdt);   
-           modal.find('.modal-body .stopdt input').val(stopdt);
+           modal.find('.modal-body .id input').val(id); 
+		   
+           modal.find('.modal-body .tzone input').val(tzone);   
+           //modal.find('.modal-body .startdt input').val(startdt);   
+           //modal.find('.modal-body .stopdt input').val(stopdt);
 		   
            modal.find('.modal-body .start_hour .default-start_hour').text(start_hour);           	   
            modal.find('.modal-body .start_min .default-start_min').text(start_min);           	   
@@ -2927,7 +2945,13 @@
            modal.find('.modal-body .stop_min .default-stop_min').text(stop_min);           	   
            modal.find('.modal-body .stop_sec .default-stop_sec').text(stop_sec); 
 
-
+           modal.find('.modal-body .start_hour .default-start_hour').val(start_hour);           	   
+           modal.find('.modal-body .start_min .default-start_min').val(start_min);           	   
+           modal.find('.modal-body .start_sec .default-start_sec').val(start_sec); 
+		   
+           modal.find('.modal-body .stop_hour .default-stop_hour').val(stop_hour);           	   
+           modal.find('.modal-body .stop_min .default-stop_min').val(stop_min);           	   
+           modal.find('.modal-body .stop_sec .default-stop_sec').val(stop_sec); 
 		   
          })           
       </script>
@@ -3725,47 +3749,9 @@ function download_porttymon_script(filename, text) {
                         <textarea class="form-control" id="pin_desc" name="pin_desc" ></textarea>
                      </div>
 					 
-					<!-- 
-					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio1" value="0" checked >
-					  <label class="form-check-label" for="inlineRadio1">Manual</label>
-					</div>					
-					</br>
-					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio2" value="1">
-					  <label class="form-check-label" for="inlineRadio2">Timer A (Single-Timer)</label>
-					</div>
-					</br>
-					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio3" value="2">
-					  <label class="form-check-label" for="inlineRadio3">Timer B (Multi-Timer)</label>
-					</div>
-					</br>	
-					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio4" value="3">
-					  <label class="form-check-label" for="inlineRadio4">Sensor Triggered</label>
-					</div>
-					</br>
-					<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="pin_mode" id="inlineRadio5" value="4" disabled>
-					  <label class="form-check-label" for="inlineRadio5">Other (disabled)</label>
-					</div>-->		 
-					 <!-- x124 -->
+					
 					 
-      <?php 
-    /*      $sql = "SELECT * FROM tbl_settings ";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0)
-            {
-                while ($row = mysqli_fetch_assoc($result))
-                {
-                    $dashboard_ip = $row['dashboard_ip'];
-                    $dashboard_port = $row['dashboard_port'];
-                    $user_mobile = $row['user_mobile'];
-                    $user_email = $row['user_email'];             
-                }
-            } */
-         ?>
+
 		 
                      <div class="form-group active">
                         <label for="inputState">pin_mode:</label>
@@ -3775,7 +3761,7 @@ function download_porttymon_script(filename, text) {
                            <option value= "set_date_time" >set_date_time</option>
                            <option value= "set_time" >set_time</option>                           
                            <option value= "set_start_stop" >set_start_stop</option>                           
-                           <option value= "set_total_seconds" >set_total_seconds</option>                           
+                                                     
                         </select>
                      </div>						 
 					 

@@ -213,10 +213,39 @@
 					}												
 				}
 				/******************************************/
-				/******************************************/
-				if($pin_mode == "set_pin_set_total_seconds"){
 							
-				}
+				/******************************************/
+				if($pin_mode == "set_start_stop"){
+					
+						
+							if((time() > strtotime($row['startdt'])) &&
+								(time() < strtotime($row['stopdt'])) ){
+								
+								if($row['active'] == 1 ){
+									$startdt = $row['stopdt'];
+									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_stop']);		
+								
+									$sql0 = "UPDATE tbl_pins SET " . 		 
+									" active = 0," . 
+									" startdt = '$startdt'," . 								
+									" stopdt = '$stopdt' " . 							
+									" WHERE id = $id ";
+									$conn->query($sql0); 															
+								}
+								if($row['active'] == 0 ){
+									$startdt = $row['stopdt'];
+									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_stop']);		
+								
+									$sql0 = "UPDATE tbl_pins SET " . 		 
+									" active = 1," . 
+									" startdt = '$startdt'," . 								
+									" stopdt = '$stopdt' " . 							
+									" WHERE id = $id ";
+									$conn->query($sql0); 															
+								}	
+							}
+				}												
+				
 				/******************************************/
 				/******************************************/
 				update_pins($board_name);	

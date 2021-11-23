@@ -530,6 +530,36 @@ function check_monitor(){
 }//
 
 
+function get_tz($board_name){
+	include ("dbconnect.php");
+	$sql = "SELECT monitor_name FROM tbl_boards WHERE board_name = '$board_name' ";
+    $result = mysqli_query($conn, $sql);    
+    if (mysqli_num_rows($result) > 0)
+    {
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($result))
+		{
+			$monitor_name = $row["monitor_name"];
+		}
+	} else {
+		return 0;
+	}
+	
+	$sql = "SELECT monitor_timezone FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0)
+    {
+        // output data of each row
+        while ($row = mysqli_fetch_assoc($result))
+		{
+			return $row["monitor_timezone"];
+		}
+	} else {
+		return 0;
+	}                                      
+}
+
+
 
 
 
