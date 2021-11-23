@@ -602,7 +602,76 @@
                   
                   } // -------   
 
+                if (isset($_POST['set_start_stop']))
+				{
+					  /*
+					  pin_name
+					  pin_num
+					  pin_desc
+					  board_name
+					  active
+					  */
+					$id = $_POST['id'];
 
+					  
+					$dur_sec = $_POST['dur_sec'];
+					$dur_min = $_POST['dur_min'];
+					$dur_hour = $_POST['dur_hour'];
+					  
+
+					$year = date("Y");
+					$month = date("m");
+					$day = date("d");
+					//$today = date("Y-m-d H:i:s"); 
+					
+					$hour = $_POST['time_hour'];
+					$minute = $_POST['time_min'];
+					$second = $_POST['time_sec'];
+					
+					$startdt = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . $second;	
+					//file_put_contents("today.txt", $today);
+					//file_put_contents("startdt.txt", $startdt);
+					
+					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + ($dur_hour*60*60) + ($dur_min*60) + ($dur_sec));	
+					//file_put_contents("stopdt.txt", $stopdt);
+					  
+
+
+					  
+					  					
+					
+					
+					
+					
+					
+					  
+					  
+					  $sql = "UPDATE tbl_pins SET " .                  
+					  " startdt 	= '$startdt', " .
+					  " stopdt 		= '$stopdt', " .
+					  " time_hour 	= '$hour', " .
+					  " time_min 	= '$minute', " .
+					  " time_sec 	= '$second', " .
+					  " dur_sec 	= '$dur_sec', " .
+					  " dur_min 	= '$dur_min', " .
+					  " dur_hour 	= '$dur_hour' " .                  
+					  " WHERE id 	= '$id' ";
+					  
+					  if ($conn->query($sql) === true)
+					  {	
+						  
+						  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  else
+					  {
+						  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  
+                  
+                  
+                  } // -------   
                   
                   if (isset($_POST['edit_pin']))
                   {
@@ -2643,18 +2712,19 @@
            modal.find('.modal-body .dur_min .default-dur_min').text(dur_min);           	   
            modal.find('.modal-body .dur_hour .default-dur_hour').text(dur_hour); 
 
-           modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
+/*            modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
            modal.find('.modal-body .time_min .default-time_min').val(time_min);           	   
            modal.find('.modal-body .time_sec .default-time_sec').val(time_sec); 
 		   
            modal.find('.modal-body .dur_sec .default-dur_sec').val(dur_sec);           	   
            modal.find('.modal-body .dur_min .default-dur_min').val(dur_min);           	   
-           modal.find('.modal-body .dur_hour .default-dur_hour').val(dur_hour); 
+           modal.find('.modal-body .dur_hour .default-dur_hour').val(dur_hour);  */
 		   
          })           
       </script>
 
-      <div class="modal fade" id="set_pin_set_total_seconds" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      
+      <div class="modal fade" id="set_pin_set_start_stop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -2665,44 +2735,200 @@
                      <span aria-hidden="true">×</span>
                      </button>
                   </div>
-				  set_pin_set_total_seconds
+				  
                   <div class="modal-body">
                      <div class="form-group id">
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
-                     <div class="form-group">					
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="cl-switch cl-switch-xlarge">
-                        <input type="checkbox" class="myswtich" name="mytoggle">
-                        <span class="switcher"></span>
-                        <span class="label modal-message"></span>
-                        </label>		  
+                     <div class="form-group">
+						 <div class="form-group start_hour">
+							<label for="start_hour">Start Duration (Hour):</label>
+							<select id="start_hour" class="form-control" name="start_hour" >                           
+							   <option value="x" class="default-start_hour" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
                      </div>
+					 
+                     <div class="form-group">
+						 <div class="form-group start_min">
+							<label for="start_min">Start Duration (Minute):</label>
+							<select id="start_min" class="form-control" name="start_min" >                           
+							   <option value="x" class="default-start_min" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>
+                     <div class="form-group">
+						 <div class="form-group start_sec">
+							<label for="start_sec">Start Duration (Second):</label>
+							<select id="start_sec" class="form-control" name="start_sec" >                           
+							   <option value="x" class="default-start_sec" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>					 
+					</>					 
+					</br>					 
+					 
+                     <div class="form-group">
+						 <div class="form-group stop_hour">
+							<label for="stop_hour">Stop Duration (Hour):</label>
+							<select id="stop_hour" class="form-control" name="stop_hour" >                           
+							   <option value="x" class="default-stop_hour" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>						 
+
+                     <div class="form-group">
+						 <div class="form-group stop_min">
+							<label for="stop_min">Stop Duration (Minute):</label>
+							<select id="stop_min" class="form-control" name="stop_min" >                           
+							   <option value="x" class="default-stop_min" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+
+                     <div class="form-group">
+						 <div class="form-group stop_sec">
+							<label for="stop_sec">Stop Duration (Second):</label>
+							<select id="stop_sec" class="form-control" name="stop_sec" >                           
+							   <option value="x" class="default-stop_sec" selected >select...</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+					 
                   </div>
                   <div class="modal-footer"> 
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
-                     <button type="submit" class="btn btn-primary" name="toggle_pin" >Submit</button>
+                     <button type="submit" class="btn btn-primary" name="set_start_stop" >Submit</button>
                   </div>
                </form>
             </div>
          </div>
       </div>
+ 
+	  
       <script type="text/javascript">
-         $('#set_pin_set_total_seconds').on('show.bs.modal', function (event) {
+         $('#set_pin_set_start_stop').on('show.bs.modal', function (event) {
            var link = $(event.relatedTarget) // Button that triggered the modal
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
-           var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           
+		   var startdt = link.data('startdt') // Extract info from data-* attributes
+           var stopdt = link.data('stopdt') // Extract info from data-* attributes
+           var start_hour = link.data('start_hour') // Extract info from data-* attributes
+           var start_min = link.data('start_min') // Extract info from data-* attributes
+           var start_sec = link.data('start_sec') // Extract info from data-* attributes
+           var stop_sec = link.data('stop_sec') // Extract info from data-* attributes
+           var stop_min = link.data('stop_min') // Extract info from data-* attributes
+           var stop_hour = link.data('stop_hour') // Extract info from data-* attributes
+           
+		   
+		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
            modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
-           //modal.find('.modal-body input').val(recipient)
-           modal.find('.modal-body .modal-message').text(pin_desc)		   
-           //modal.find('.modal-body .cl-switch input').text(active)		   
+           
+		   
+           modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+           modal.find('.modal-body .startdt input').val(startdt);   
+           modal.find('.modal-body .stopdt input').val(stopdt);
+		   
+           modal.find('.modal-body .start_hour .default-start_hour').text(start_hour);           	   
+           modal.find('.modal-body .start_min .default-start_min').text(start_min);           	   
+           modal.find('.modal-body .start_sec .default-start_sec').text(start_sec); 
+		   
+           modal.find('.modal-body .stop_hour .default-stop_hour').text(stop_hour);           	   
+           modal.find('.modal-body .stop_min .default-stop_min').text(stop_min);           	   
+           modal.find('.modal-body .stop_sec .default-stop_sec').text(stop_sec); 
+
+
+		   
          })           
       </script>
 	  
@@ -3548,6 +3774,7 @@ function download_porttymon_script(filename, text) {
                            <option value= "manual" >manual</option>
                            <option value= "set_date_time" >set_date_time</option>
                            <option value= "set_time" >set_time</option>                           
+                           <option value= "set_start_stop" >set_start_stop</option>                           
                            <option value= "set_total_seconds" >set_total_seconds</option>                           
                         </select>
                      </div>						 
