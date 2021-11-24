@@ -2807,13 +2807,13 @@
 							<select id="start_sec" class="form-control" name="start_sec" >                           
 							   <option value="x" class="default-start_sec" selected >select...</option>
 							   <?php
-							   $i = 0;
+							   /* $i = 0;
 								while(true){										
 									echo '<option value="0' .$i. '">0' .$i. '</option>';
 									if($i == 9)break;
 									$i++;
-								}
-							   $i = 10;
+								} */
+							   $i = 30;
 								while(true){										
 									echo '<option value="' .$i. '">' .$i. '</option>';
 									if($i == 59)break;
@@ -2878,13 +2878,13 @@
 							<select id="stop_sec" class="form-control" name="stop_sec" >                           
 							   <option value="x" class="default-stop_sec" selected >select...</option>
 							   <?php
-							   $i = 0;
+							   /* $i = 0;
 								while(true){										
 									echo '<option value="0' .$i. '">0' .$i. '</option>';
 									if($i == 9)break;
 									$i++;
-								}
-							   $i = 10;
+								} */
+							   $i = 30;
 								while(true){
 									echo '<option value="' .$i. '">' .$i. '</option>';																		
 									if($i == 59)break;
