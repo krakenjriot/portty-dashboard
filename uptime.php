@@ -215,8 +215,7 @@
 				/******************************************/
 							
 				/******************************************/
-				if($pin_mode == "set_start_stop"){
-					
+				if($pin_mode == "set_start_stop"){				
 						
 							if((time() > strtotime($row['startdt'])) &&
 								(time() < strtotime($row['stopdt'])) ){
@@ -234,7 +233,7 @@
 								}
 								if($row['active'] == 0 ){
 									$startdt = $row['stopdt'];
-									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_stop']);		
+									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_start']);		
 								
 									$sql0 = "UPDATE tbl_pins SET " . 		 
 									" active = 1," . 
