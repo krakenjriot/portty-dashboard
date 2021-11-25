@@ -630,9 +630,9 @@
 					$dur_stop = ($stop_hour*60*60) + ($stop_min*60) + ($stop_sec);	
 
 					$startdt = date("Y-m-d H:i:s");	
-					file_put_contents("test5.txt", $startdt);						
+					//file_put_contents("test5.txt", $startdt);						
 					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $dur_start);					
-					file_put_contents("test6.txt", $stopdt);	
+					//file_put_contents("test6.txt", $stopdt);	
 				  
 					  
 					  $sql = "UPDATE tbl_pins SET " .                  
@@ -2200,6 +2200,7 @@
 											$stop_sec = $row["dur_stop"] % 60;
 											//$tzone = "Asia/Riyadh";
 											$tzone = get_tz($row["board_name"]);
+											//file_put_contents("testc.txt", $tzone );	
 											
                                             echo "<tr>" . "<td><a href='#' data-toggle='modal' data-target='#editPin' class='btn btn-primary btn-circle btn-sm' 
                                     									data-id='" . $row["id"] . "' 
@@ -2813,6 +2814,7 @@
 									if($i == 9)break;
 									$i++;
 								} */
+								echo '<option value="0">0</option>';
 							   $i = 30;
 								while(true){										
 									echo '<option value="' .$i. '">' .$i. '</option>';
@@ -2884,6 +2886,7 @@
 									if($i == 9)break;
 									$i++;
 								} */
+								echo '<option value="0">0</option>';
 							   $i = 30;
 								while(true){
 									echo '<option value="' .$i. '">' .$i. '</option>';																		

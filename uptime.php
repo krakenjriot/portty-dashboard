@@ -137,9 +137,9 @@
 				$board_name = $row['board_name'];
 				/******************************************/		
 				/******************************************/
-				$sql2 = "SELECT * FROM tbl_boards WHERE board_name = '$board_name' ";
+				/* $sql2 = "SELECT * FROM tbl_boards WHERE board_name = '$board_name' ";
 				$result2 = mysqli_query($conn, $sql2);         
-				//$pin_mode = "";
+				
 				if (mysqli_num_rows($result2) > 0)
 				{
 						// output data of each row
@@ -152,7 +152,7 @@
 				
 				$sql1 = "SELECT * FROM tbl_monitors WHERE monitor_name = '$monitor_name' ";
 				$result1 = mysqli_query($conn, $sql1);         
-				//$pin_mode = "";
+				
 				if (mysqli_num_rows($result1) > 0)
 				{
 						// output data of each row
@@ -162,13 +162,15 @@
 						}
 				} else {
 							$monitor_timezone = "Asia/Riyadh";	
-				}
+				} */
 				
 				/******************************************/		
 				/******************************************/
+				$monitor_timezone = get_tz($board_name);
 				date_default_timezone_set($monitor_timezone);
 				//file_put_contents("test.txt", $monitor_timezone );	
-				if($pin_mode == "set_date_time"){								
+				if($pin_mode == "set_date_time"){
+					
 					if((time() > strtotime($row['startdt'])) &&
 						(time() < strtotime($row['stopdt'])) ){							
 						/****************************************/
@@ -184,6 +186,8 @@
 						" active = 0 " . 
 						" WHERE id = $id ";
 						$conn->query($sql0);
+						/****************************************/
+	
 						/****************************************/								
 						//file_put_contents("test.txt", "inactive" );
 					}						
@@ -213,15 +217,16 @@
 					}												
 				}
 				/******************************************/
-							
+				$file = 'test.txt';			
 				/******************************************/
 				if($pin_mode == "set_start_stop"){				
 						
-							if((time() > strtotime($row['startdt'])) &&
-								(time() < strtotime($row['stopdt'])) ){
+					if((time() > strtotime($row['startdt'])) &&
+						(time() < strtotime($row['stopdt'])) ){	
 								
 								if($row['active'] == 1 ){
 									$startdt = $row['stopdt'];
+									//$startdt = date("Y-m-d H:i:s");
 									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_stop']);		
 								
 									$sql0 = "UPDATE tbl_pins SET " . 		 
@@ -229,10 +234,15 @@
 									" startdt = '$startdt'," . 								
 									" stopdt = '$stopdt' " . 							
 									" WHERE id = $id ";
-									$conn->query($sql0); 															
+									$conn->query($sql0); 
+									/***********************************************/									
+									$message = date("Y-m-d H:i:s") . " OFF $startdt/$stopdt";
+									file_put_contents($file, PHP_EOL . $message, FILE_APPEND);							
+									/***********************************************/									
 								}
 								if($row['active'] == 0 ){
 									$startdt = $row['stopdt'];
+									//$startdt = date("Y-m-d H:i:s");
 									$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + $row['dur_start']);		
 								
 									$sql0 = "UPDATE tbl_pins SET " . 		 
@@ -240,11 +250,14 @@
 									" startdt = '$startdt'," . 								
 									" stopdt = '$stopdt' " . 							
 									" WHERE id = $id ";
-									$conn->query($sql0); 															
+									$conn->query($sql0); 	
+									/***********************************************/									
+									$message = date("Y-m-d H:i:s") . " ON $startdt/$stopdt";
+									file_put_contents($file, PHP_EOL . $message, FILE_APPEND);							
+									/***********************************************/	
 								}	
 							}
-				}												
-				
+				}
 				/******************************************/
 				/******************************************/
 				update_pins($board_name);	
