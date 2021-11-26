@@ -225,7 +225,7 @@
 					
 					((time() > strtotime($row['startdt'])) &&						
 					(time() < strtotime($row['stopdt'])))  
-					|| (time() > strtotime($row['stopdt'])) //just in case lost timing						
+					|| (time() > strtotime($row['startdt'])) //just in case lost timing						
 					  )
 					{	
 							
