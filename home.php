@@ -442,7 +442,9 @@
 					  $dtp_input1 = $_POST['dtp_input1'];
 					  $dtp_input2 = $_POST['dtp_input2'];
 					  
-					  
+					$tzone = $_POST['tzone'];
+					date_default_timezone_set($tzone);
+					
 					  
 					$year1 = date("Y", strtotime($dtp_input1));
 					$day1 = date("d", strtotime($dtp_input1));
@@ -522,7 +524,9 @@
 					  */
 					$id = $_POST['id'];
 
-					  
+					$tzone = $_POST['tzone'];
+					date_default_timezone_set($tzone);
+					
 					$dur_sec = $_POST['dur_sec'];
 					$dur_min = $_POST['dur_min'];
 					$dur_hour = $_POST['dur_hour'];
@@ -567,13 +571,7 @@
 						  }
 					  } */
 					  
-					  					
-					
-					
-					
-					
-					
-					  
+
 					  
 					  $sql = "UPDATE tbl_pins SET " .                  
 					  " startdt 	= '$startdt', " .
@@ -600,7 +598,75 @@
 					  
                   
                   
-                  } // -------   
+                  } // -------
+
+				//123456
+                if (isset($_POST['set_filter']))
+				{
+					 
+					$id = $_POST['id'];
+					$dur_sec = $_POST['dur_sec'];
+					$dur_min = $_POST['dur_min'];
+					$dur_hour = $_POST['dur_hour'];
+					
+					$tzone = $_POST['tzone'];
+					date_default_timezone_set($tzone);
+					  
+					$year = date("Y");
+					$month = date("m");
+					$day = date("d");
+					
+					$hour = $_POST['time_hour'];
+					$minute = $_POST['time_min'];
+					$second = $_POST['time_sec'];
+					
+					$hour_box = $_POST['hour_box'];
+					$min_box = $_POST['min_box'];
+					$sec_box = $_POST['sec_box'];
+					
+					if($hour_box == "on") $hour_box = 1;
+					else $hour_box = 0;
+
+					if($min_box == "on") $min_box = 1;
+					else $min_box = 0;
+					
+					if($sec_box == "on") $sec_box = 1;
+					else $sec_box = 0;					
+					
+					file_put_contents("box.txt", "$hour_box $min_box $sec_box");	
+					
+					$startdt = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . $second;	
+					$stopdt = date("Y-m-d H:i:s", strtotime($startdt) + ($dur_hour*60*60) + ($dur_min*60) + ($dur_sec));	
+				  									  				  
+					  $sql = "UPDATE tbl_pins SET " .                  
+					  " hour_box 	= '$hour_box', " .
+					  " min_box 	= '$min_box', " .
+					  " sec_box 	= '$sec_box', " .
+					  " startdt 	= '$startdt', " .
+					  " stopdt 		= '$stopdt', " .
+					  " time_hour 	= '$hour', " .
+					  " time_min 	= '$minute', " .
+					  " time_sec 	= '$second', " .
+					  " dur_sec 	= '$dur_sec', " .
+					  " dur_min 	= '$dur_min', " .
+					  " dur_hour 	= '$dur_hour' " .                  
+					  " WHERE id 	= '$id' ";
+					  
+					  if ($conn->query($sql) === true)
+					  {	
+						  
+						  header("location: ?p=4&pin_notif=update-pin-success&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  else
+					  {
+						  header("location: ?p=4&pin_notif=update-pin-failed&$mytoggle#mark-pin");
+						  exit();
+					  }
+					  
+                  
+                  
+                  } // -------  				  
 
                 if (isset($_POST['set_start_stop']))
 				{
@@ -622,8 +688,7 @@
 					$stop_min = $_POST['stop_min'];
 					$stop_sec = $_POST['stop_sec'];
 					
-					$tzone = $_POST['tzone'];
-					
+					$tzone = $_POST['tzone'];					
 					date_default_timezone_set($tzone);
 					  
 					$dur_start = ($start_hour*60*60) + ($start_min*60) + ($start_sec);	
@@ -2169,6 +2234,8 @@
                                     //$sql = "SELECT * FROM tbl_pins ";
                                     $result = mysqli_query($conn, $sql);
                                     $i = 1;
+									$time_hour = 0;
+									$time_min = 0;
                                     if (mysqli_num_rows($result) > 0)
                                     {
                                         // output data of each row
@@ -2198,9 +2265,18 @@
 											$stop_hour = floor($row["dur_stop"] / 3600);
 											$stop_min = floor(($row["dur_stop"] / 60) % 60);
 											$stop_sec = $row["dur_stop"] % 60;
-											//$tzone = "Asia/Riyadh";
+											
 											$tzone = get_tz($row["board_name"]);
-											//file_put_contents("testc.txt", $tzone );	
+											//123456
+											$tzone = get_tz($row["board_name"]);
+									/* 	 	if($row["ignore_h"] == 1) $time_hour = "0 (disabled)";
+											else  $time_hour = $row["time_hour"];
+											
+											if($row["ignore_m"] == 1) $time_min = "0 (disabled)";
+											else  $time_min = $row["time_min"];
+												
+											if($row["ignore_s"] == 1) $time_sec = "0 (disabled)";
+											else  $time_sec = $row["time_sec"];  */
 											
                                             echo "<tr>" . "<td><a href='#' data-toggle='modal' data-target='#editPin' class='btn btn-primary btn-circle btn-sm' 
                                     									data-id='" . $row["id"] . "' 
@@ -2215,16 +2291,22 @@
                                     									"<td><a href='#' data-toggle='modal' data-target='#set_pin_". $row["pin_mode"] ."' class='btn " . $butt_status . " btn-circle btn-sm'
                                     									data-id='" . $row["id"] . "'
                                     									data-startdt='" . $row["startdt"] . "'
-                                    									data-stopdt='" . $row["stopdt"] . "'																		
+                                    									data-stopdt='" . $row["stopdt"] . "'	
+																		
                                     									data-time_hour='" . $row["time_hour"] . "'
                                     									data-time_min='" . $row["time_min"] . "'
                                     									data-time_sec='" . $row["time_sec"] . "'
+																		
                                     									data-dur_sec='" . $row["dur_sec"] . "'
                                     									data-dur_min='" . $row["dur_min"] . "'
                                     									data-dur_hour='" . $row["dur_hour"] . "'
                                     									data-pin_num='" . $row["pin_num"] . "'
                                     									data-pin_name='" . $row["pin_name"] . " '
                                     									data-pin_desc='" . $row["pin_desc"] . "'
+                                    									
+																		data-hour_box='" . $row["hour_box"] . "'
+																		data-min_box='" . $row["min_box"] . "'
+																		data-sec_box='" . $row["sec_box"] . "'
 
                                     									data-start_hour='" . $start_hour . "'
                                     									data-start_min='" . $start_min . "'
@@ -2335,6 +2417,11 @@
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
+                     <div class="form-group tzone">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="tzone" name="tzone" hidden>
+                     </div>					 
+					 
                      <div class="form-group">					
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="cl-switch cl-switch-xlarge">
@@ -2360,13 +2447,17 @@
            var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
+			var tzone = link.data('tzone') // Extract info from data-* attributes
+				   
+		   
            var modal = $(this)
-           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           modal.find('.modal-title').text("Manual [ " + pin_num + " ] " + pin_name)
            //modal.find('.modal-body input').val(recipient)
            modal.find('.modal-body .modal-message').text(pin_desc)		   
            //modal.find('.modal-body .cl-switch input').text(active)		   
            modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .cl-switch input').prop( "checked", active );           	   
+           modal.find('.modal-body .cl-switch input').prop( "checked", active );  
+			modal.find('.modal-body .tzone input').val(tzone);	
          })           
       </script>	
 
@@ -2388,6 +2479,13 @@
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
+					 
+                     <div class="form-group tzone">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="tzone" name="tzone" hidden>
+                     </div>						 
+					 
+					 
                    <!--   <div class="form-group">					
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <label class="cl-switch cl-switch-xlarge">
@@ -2492,13 +2590,16 @@
            var startdt = link.data('startdt') // Extract info from data-* attributes
            var stopdt = link.data('stopdt') // Extract info from data-* attributes
            
+			var tzone = link.data('tzone') // Extract info from data-* attributes
+
 		   
 		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
-           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
-           
+           modal.find('.modal-title').text("Set Date/Time [ " + pin_num + " ] " + pin_name)
+			
+			modal.find('.modal-body .tzone input').val(tzone);             
 		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
@@ -2536,6 +2637,15 @@
                         <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
                         <input type="text" class="form-control" id="id" name="id" hidden>
                      </div>
+					 
+                     <div class="form-group tzone">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="tzone" name="tzone" hidden>
+                     </div>						 
+					 
+					 
+					 
+					 
                      <div class="form-group">
 						 <div class="form-group time_hour">
 							<label for="time_hour">Time (Hour):</label>
@@ -2692,27 +2802,29 @@
            var id = link.data('id') // Extract info from data-* attributes
            var pin_num = link.data('pin_num') // Extract info from data-* attributes
            
-		   var startdt = link.data('startdt') // Extract info from data-* attributes
-           var stopdt = link.data('stopdt') // Extract info from data-* attributes
+		   //var startdt = link.data('startdt') // Extract info from data-* attributes
+           //var stopdt = link.data('stopdt') // Extract info from data-* attributes
            var time_hour = link.data('time_hour') // Extract info from data-* attributes
            var time_min = link.data('time_min') // Extract info from data-* attributes
            var time_sec = link.data('time_sec') // Extract info from data-* attributes
            var dur_sec = link.data('dur_sec') // Extract info from data-* attributes
            var dur_min = link.data('dur_min') // Extract info from data-* attributes
            var dur_hour = link.data('dur_hour') // Extract info from data-* attributes
-           
+			var tzone = link.data('tzone') // Extract info from data-* attributes
+			        
 		   
 		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
-           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           modal.find('.modal-title').text("Set Time [ " + pin_num + " ] " + pin_name)
            
+			modal.find('.modal-body .tzone input').val(tzone);    
 		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id);   
-           modal.find('.modal-body .startdt input').val(startdt);   
-           modal.find('.modal-body .stopdt input').val(stopdt);
+           //modal.find('.modal-body .startdt input').val(startdt);   
+           //modal.find('.modal-body .stopdt input').val(stopdt);
 		   
            modal.find('.modal-body .time_hour .default-time_hour').text(time_hour);           	   
            modal.find('.modal-body .time_min .default-time_min').text(time_min);           	   
@@ -2732,7 +2844,266 @@
 		   
          })           
       </script>
+		
+      <div class="modal fade" id="set_pin_set_filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <form class="user" action="?p=4" method="post">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel"></h5>
+                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">×</span>
+                     </button>
+                  </div>
+				  
+                  <div class="modal-body">
+                     <div class="form-group id">
+                        <!--123456<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="id" name="id" hidden>
+                     </div>
+					 
+                     <div class="form-group tzone">
+                        <!--<label for="recipient-name" class="col-form-label">board_name:</label>-->                                                
+                        <input type="text" class="form-control" id="tzone" name="tzone" hidden>
+                     </div>						 
+					 
+                     <div class="form-group">
+						 <div class="form-group time_hour">
+							<label for="time_hour">Time (Hour):</label>
+							
+							<select id="time_hour" class="form-control" name="time_hour" >                           
+							   <option value="x" class="default-time_hour" selected >x</option>							   
+							   					   
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 <label for="time_hour_box">Disabled Filter:</label>
+							<input name="hour_box" id= "time_hour_box" class="default-time_hour_box" type="checkbox"/>							
+						 </div>	
 
+                     </div>
+					 
+                     <div class="form-group">
+						 <div class="form-group time_min">
+							<label for="time_min">Time (Minute):</label>
+							<select id="time_min" class="form-control" name="time_min" >                           
+							   <option value="x" class="default-time_min" selected >x</option>
+							   
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 <label for="time_min_box">Disabled Filter:</label>
+							<input name="min_box" id= "time_min_box" class="default-time_min_box" type="checkbox"/>							
+							
+						 </div>	
+                     </div>
+                     <div class="form-group">
+						 <div class="form-group time_sec">
+							<label for="time_sec">Time (Second):</label>
+							<select id="time_sec" class="form-control" name="time_sec" >  
+								<option value="x" class="default-time_sec" selected >x</option>
+							    
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){										
+									echo '<option value="' .$i. '">' .$i. '</option>';
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 <label for="time_sec_box">Disabled Filter:</label>
+							<input name="sec_box" id= "time_sec_box" class="default-time_sec_box" type="checkbox"/>							
+						 </div>	
+                     </div>					 
+					</>					 
+					</br>					 
+					 
+                     <div class="form-group">
+						 <div class="form-group dur_sec">
+							<label for="dur_sec">Duration(Second):</label>
+							<select id="dur_sec" class="form-control" name="dur_sec" >                           
+							   <option value="x" class="default-dur_sec" selected >x</option>
+							   <?php
+/* 							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								} */
+							   $i = 30;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>						 
+
+                     <div class="form-group">
+						 <div class="form-group dur_min">
+							<label for="dur_min">Duration(Minute):</label>
+							<select id="dur_min" class="form-control" name="dur_min" >                           
+							   <option value="x" class="default-dur_min" selected >x</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 59)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+
+                     <div class="form-group">
+						 <div class="form-group dur_hour">
+							<label for="dur_hour">Duration(Hour):</label>
+							<select id="dur_hour" class="form-control" name="dur_hour" >                           
+							   <option value="x" class="default-dur_hour" selected >x</option>
+							   <?php
+							   $i = 0;
+								while(true){										
+									echo '<option value="0' .$i. '">0' .$i. '</option>';
+									if($i == 9)break;
+									$i++;
+								}
+							   $i = 10;
+								while(true){
+									echo '<option value="' .$i. '">' .$i. '</option>';																		
+									if($i == 23)break;
+									$i++;
+								}
+							   ?>                          
+							</select>
+						 </div>	
+                     </div>	
+					 
+                  </div>
+                  <div class="modal-footer"> 
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>		  
+                     <button type="submit" class="btn btn-primary" name="set_filter" >Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+ 
+	  
+      <script type="text/javascript">
+         $('#set_pin_set_filter').on('show.bs.modal', function (event) {
+           var link = $(event.relatedTarget) // Button that triggered the modal
+           var id = link.data('id') // Extract info from data-* attributes
+           var pin_num = link.data('pin_num') // Extract info from data-* attributes
+           
+		   var hour_box = link.data('hour_box') // Extract info from data-* attributes
+           var min_box = link.data('min_box') // Extract info from data-* attributes
+           var sec_box = link.data('sec_box') // Extract info from data-* attributes
+           
+		   var time_hour = link.data('time_hour') // Extract info from data-* attributes
+           var time_min = link.data('time_min') // Extract info from data-* attributes
+           var time_sec = link.data('time_sec') // Extract info from data-* attributes
+           var dur_sec = link.data('dur_sec') // Extract info from data-* attributes
+           var dur_min = link.data('dur_min') // Extract info from data-* attributes
+           var dur_hour = link.data('dur_hour') // Extract info from data-* attributes
+		   var tzone = link.data('tzone') // Extract info from data-* attributes
+        
+		   
+		   var pin_name = link.data('pin_name') // Extract info from data-* attributes
+           var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
+           var active = link.data('active') // Extract info from data-* attributes
+           var modal = $(this)
+		   
+           modal.find('.modal-title').text("Set Filter [ " + pin_num + " ] " + pin_name)          
+			modal.find('.modal-body .tzone input').val(tzone);    		   
+           modal.find('.modal-body .modal-message').text(pin_desc)		              	   
+           modal.find('.modal-body .id input').val(id);   
+           //modal.find('.modal-body .startdt input').val(startdt);   
+           //modal.find('.modal-body .stopdt input').val(stopdt);		 
+		   
+		   if(hour_box == 1) {
+				modal.find('.modal-body .time_hour .default-time_hour').text("(no filter)"); 
+				modal.find('.modal-body .time_hour .default-time_hour_box').attr('checked', true);	
+		   } else {
+				modal.find('.modal-body .time_hour .default-time_hour').text(time_hour);           	   
+				modal.find('.modal-body .time_hour .default-time_hour_box').attr('checked', false);
+		   }
+ 
+		   if(min_box == 1) {
+				modal.find('.modal-body .time_min .default-time_min').text("(no filter)");       
+				modal.find('.modal-body .time_min .default-time_min_box').attr('checked', true);	
+		   } else {             
+				modal.find('.modal-body .time_min .default-time_min').text(time_min);           	   
+				modal.find('.modal-body .time_min .default-time_min_box').attr('checked', false)
+		   }
+
+		   if(sec_box == 1) {
+				modal.find('.modal-body .time_sec .default-time_sec').text("(no filter)");   
+				modal.find('.modal-body .time_sec .default-time_sec_box').attr('checked', true);	
+		   } else {
+				modal.find('.modal-body .time_sec .default-time_sec').text(time_sec);           
+				modal.find('.modal-body .time_sec .default-time_sec_box').attr('checked', false);
+		   }  
+
+		   
+           //modal.find('.modal-body .time_min .default-time_min').text(time_min);           	   
+           //modal.find('.modal-body .time_sec .default-time_sec').text(time_sec); 
+		   
+           modal.find('.modal-body .dur_sec .default-dur_sec').text(dur_sec);           	   
+           modal.find('.modal-body .dur_min .default-dur_min').text(dur_min);           	   
+           modal.find('.modal-body .dur_hour .default-dur_hour').text(dur_hour); 
+
+           modal.find('.modal-body .time_hour .default-time_hour').val(time_hour);           	   
+           modal.find('.modal-body .time_min .default-time_min').val(time_min);           	   
+           modal.find('.modal-body .time_sec .default-time_sec').val(time_sec); 
+		   
+           modal.find('.modal-body .dur_sec .default-dur_sec').val(dur_sec);           	   
+           modal.find('.modal-body .dur_min .default-dur_min').val(dur_min);           	   
+           
+		   //modal.find('.modal-body .time_hour .default-time_hour_box').attr('checked', true); 
+		   
+         })           
+      </script>
       
       <div class="modal fade" id="set_pin_set_start_stop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -2930,15 +3301,14 @@
            var pin_desc = link.data('pin_desc') // Extract info from data-* attributes
            var active = link.data('active') // Extract info from data-* attributes
            var modal = $(this)
-           modal.find('.modal-title').text("[ " + pin_num + " ] " + pin_name)
+           modal.find('.modal-title').text("Set Start/Stop [ " + pin_num + " ] " + pin_name)
            
 		   
            modal.find('.modal-body .modal-message').text(pin_desc)		              	   
            modal.find('.modal-body .id input').val(id); 
 		   
            modal.find('.modal-body .tzone input').val(tzone);   
-           //modal.find('.modal-body .startdt input').val(startdt);   
-           //modal.find('.modal-body .stopdt input').val(stopdt);
+          
 		   
            modal.find('.modal-body .start_hour .default-start_hour').text(start_hour);           	   
            modal.find('.modal-body .start_min .default-start_min').text(start_min);           	   
@@ -3762,8 +4132,9 @@ function download_porttymon_script(filename, text) {
                            <option class="default_active" selected ></option>
                            <option value= "manual" >manual</option>
                            <option value= "set_date_time" >set_date_time</option>
-                           <option value= "set_time" >set_time</option>                           
+                                             
                            <option value= "set_start_stop" >set_start_stop</option>                           
+                           <option value= "set_filter" >set_filter</option>                           
                                                      
                         </select>
                      </div>						 
