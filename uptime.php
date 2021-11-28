@@ -256,7 +256,7 @@
 				
 				if($row['hour_box'] == 1 ){ $ok_h = 1; } 
 				if($row['min_box'] == 1){ $ok_m = 1; } 	
-				//if($row['sec_box'] == 1) { $ok_s = 1; } 
+				if($row['sec_box'] == 1) { $ok_s = 1; } 
 				
 				//file_put_contents("testH.txt", $row['hour_box'] );
 				
